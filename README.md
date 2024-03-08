@@ -1,4 +1,14 @@
-# my-vue-project
+# my-vue-project 
+
+1. Run the Python server
+```
+cd backend
+python3 server.py
+```
+2. Run the client app
+```
+npm run serve
+```
 
 ## Project setup
 ```
