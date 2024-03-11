@@ -23,33 +23,33 @@ export default {
     };
   },
   mounted() {
-    const serverUrl = "ws://10.121.11.69:8765";
+    // const serverUrl = "ws://10.121.11.69:8765";
+    //
+    // const socket = new WebSocket(serverUrl);
+    //
+    // socket.onopen = () => {
+    //   console.log("WebSocket connection established");
+    // };
 
-    const socket = new WebSocket(serverUrl);
-
-    socket.onopen = () => {
-      console.log("WebSocket connection established");
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.point_cloud) {
-        this.receivedData = JSON.parse(data.point_cloud);
-        // console.log(this.receivedData);
-        // console.log(Array.isArray(this.receivedData))
-        this.plot();
-      } else {
-        console.warn("Received data does not contain 'point_cloud' property");
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error(`WebSocket error: ${error}`);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+    // socket.onmessage = (event) => {
+    //   const data = JSON.parse(event.data);
+    //   if (data.point_cloud) {
+    //     this.receivedData = JSON.parse(data.point_cloud);
+    //     // console.log(this.receivedData);
+    //     // console.log(Array.isArray(this.receivedData))
+    //     this.plot();
+    //   } else {
+    //     console.warn("Received data does not contain 'point_cloud' property");
+    //   }
+    // };
+    //
+    // socket.onerror = (error) => {
+    //   console.error(`WebSocket error: ${error}`);
+    // };
+    //
+    // socket.onclose = () => {
+    //   console.log("WebSocket connection closed");
+    // };
   },
   methods: {
     plot() {
@@ -69,7 +69,7 @@ export default {
         // Create geometry and material for points
         this.geometry = new THREE.BufferGeometry();
         this.sprite = new THREE.TextureLoader().load( '@assets/disc.png' );
-        this.material = new THREE.PointsMaterial({ 
+        this.material = new THREE.PointsMaterial({
             size: 0.1, // Adjust the size of the sprite
             map: this.sprite,
             vertexColors: true // Enable vertex colors

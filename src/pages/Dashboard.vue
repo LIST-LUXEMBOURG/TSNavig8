@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps } from 'vue';
-import WebSocketHandler2 from '@/components/WebSocketHandler2.vue';
-import PlotComponent from '@/components/PlotComponent.vue';
+// import WebSocketHandler2 from '@/components/WebSocketHandler2.vue';
+// import PlotComponent from '@/components/PlotComponent.vue';
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
 
 defineProps({
@@ -10,8 +10,8 @@ defineProps({
         required: true
     },
     components:{
-        PlotComponent,
-        WebSocketHandler2,
+        // PlotComponent,
+        // WebSocketHandler2,
         PlotLidarComponent
     }
 })
@@ -27,28 +27,24 @@ defineProps({
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="grid-item">
-                    <WebSocketHandler2  />
-                </div>
-            </div>
+/
         </div>
 
-        <div class="row">
-            <div class="col-6">
-                <div class="grid-item">
-                    <h3>Text</h3>
-                    <!-- Additional child component or content -->
-                </div>
-            </div>
+<!--        <div class="row">-->
+<!--            <div class="col-6">-->
+<!--                <div class="grid-item">-->
+<!--                    <h3>Text</h3>-->
+<!--                    &lt;!&ndash; Additional child component or content &ndash;&gt;-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="col-6">
-                <div class="grid-item">
-                    <!-- Additional child component or content -->
-                    <PlotComponent />
-                </div>
-            </div>
-        </div>
+<!--            <div class="col-6">-->
+<!--                <div class="grid-item">-->
+<!--                    &lt;!&ndash; Additional child component or content &ndash;&gt;-->
+<!--                    <PlotComponent />-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </template>
 

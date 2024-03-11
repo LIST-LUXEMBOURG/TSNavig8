@@ -1,20 +1,16 @@
+<script setup>
+import Dashboard from '@/pages/Dashboard.vue';
+
+</script>
+
 <template>
   <div class="container">
         <Dashboard title="TSN" />
-        <div>
-    </div>
+<!--        <div>-->
+<!--    </div>-->
   </div>
 </template>
-<script>
-import Dashboard from './pages/Dashboard.vue';
-export default {
-  
-  components: {
-    Dashboard, 
-    },
-};
-</script>
 
-<style>
+<style scoped>
 
 </style>
