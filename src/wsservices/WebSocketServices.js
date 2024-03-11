@@ -1,13 +1,16 @@
+import {inject} from "vue";
+
 export class WSServices {
-    constructor(options, store) {
+    constructor(options) {
         this.ws = null
         this.options = options
-        this.store = store
+        this.store = null
         this.id_client = -1
         this.reconnectInterval = options.reconnectInterval || 1000
     }
 
     connect() {
+        this.store = inject("$lidarDataStore")
         if (this.ws == null) {
             this.ws = new WebSocket(this.options.url)
             console.log("New web socket instance is created")

@@ -5,11 +5,12 @@
   <script setup>
   import * as THREE from 'three';
   import {onMounted, ref, inject} from "vue";
-  //import {usePointsStore} from "@/store/pointsStore";
+  import {usePointsStore} from "@/store/pointsStore";
 
   const $wsServices = inject('$wsServices')
-  //const store = usePointsStore()
-  //const $points = store.getLidarData
+  const store = usePointsStore()
+  const $points = store.getLidarData
+  console.log("points: " + JSON.stringify($points))
 
   let scene = null
   let camera = null
@@ -21,7 +22,10 @@
 
   onMounted(() => {
     $wsServices.connect()
+
     init();
+    store.ADD_LIDAR_DATA([10, 20, 30])
+
   })
 
   const animate = () => {
