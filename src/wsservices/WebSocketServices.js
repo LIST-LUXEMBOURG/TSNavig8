@@ -51,7 +51,7 @@ export class WSServices {
         this.ws.onmessage = (event) => {
             const points_received = JSON.parse(event.data)
             console.log("received data from LIDAR: " + points_received)
-            this.store.commit("ADD_POINTS", points_received)
+            this.store.ADD_LIDAR_DATA(points_received)
         }
     }
 
