@@ -1,31 +1,38 @@
 <template>
-    <div ref="container" id="container"></div>
+  <div class="d-flex flex-column">
+    <p>{{ pointsData }}</p>
+    <canvas id="lidar-container"></canvas>
+<!--    <p></p>-->
+    <button class="btn btn-primary m-2" @click="increase">increase</button>
+  </div>
   </template>
 
   <script setup>
   import * as THREE from 'three';
-  import {onMounted, ref, inject} from "vue";
+  import {onMounted, ref, inject, computed} from "vue";
   import {usePointsStore} from "@/store/pointsStore";
 
   const $wsServices = inject('$wsServices')
   const store = usePointsStore()
-  const $points = store.getLidarData
-  console.log("points: " + JSON.stringify($points))
+  let pointsData = computed( () => {return store.getLidarData} )
+  //console.log("points: " + JSON.stringify(points))
 
+  let p = ref(0)
+
+  let canvas = null
   let scene = null
   let camera = null
   let renderer = null
   let geometry = null
   let sprite = null
   let material = ref(null)
-  let points = ref(null)
+  let pointsThree = ref(null)
 
   onMounted(() => {
     $wsServices.connect()
 
     init();
-    store.ADD_LIDAR_DATA([10, 20, 30])
-
+//    store.setLidarData([10, 20, 30])
   })
 
   const animate = () => {
@@ -44,17 +51,20 @@
       camera.position.z = 10;
 
       // Create renderer
-      renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth/2, window.innerHeight/2);
+      canvas = document.getElementById('lidar-container');
+      renderer = new THREE.WebGLRenderer({antialias: true, canvas:canvas});
+//      renderer.setSize(window.innerWidth/2, window.innerHeight/2);
+
 //      console.log("renderer: " + JSON.stringify(renderer))
-      document.getElementById('container').appendChild(renderer.domElement);
+//      document.getElementById('container').appendChild(renderer.domElement);
 
       const numPoints=100
       const positions = new Float32Array(numPoints * 3); // Each point has x, y, z coordinates
       const colors = new Float32Array(numPoints * 3); // Each point has r, g, b colors
 
       for (let i = 0; i < numPoints; i++) {
-        // Generate random point coordinates
+
+         // Generate random point coordinates
         const x = Math.random() * 20 - 10; // Adjust range as needed
         const y = Math.random() * 20 - 10;
         const z = Math.random() * 20 - 10;
@@ -84,13 +94,17 @@
         vertexColors: true // Enable vertex colors
       });
 
-      points = new THREE.Points(geometry, material);
-      scene.add(points);
+      pointsThree = new THREE.Points(geometry, material);
+      scene.add(pointsThree);
 
       // Start rendering loop
       animate();
   }
 
+  function increase() {
+    store.setLidarData([p.value, p.value*2, p.value*3])
+    p.value++
+  }
   </script>
 
   <style scoped>

@@ -9,7 +9,7 @@ export const usePointsStore = defineStore('lidarData', {
         getLidarData: state => state.lidarData,
     },
     actions: {
-        ADD_LIDAR_DATA(lidarData) {
+        setLidarData(lidarData) {
             this.lidarData = lidarData
             console.log("lidarData: " + JSON.stringify(this.getLidarData))
         }

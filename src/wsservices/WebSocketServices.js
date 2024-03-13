@@ -1,16 +1,19 @@
 import {inject} from "vue";
 
 export class WSServices {
+
     constructor(options) {
         this.ws = null
         this.options = options
         this.store = null
+        this.setLidarData = null
         this.id_client = -1
         this.reconnectInterval = options.reconnectInterval || 1000
     }
 
     connect() {
         this.store = inject("$lidarDataStore")
+        this.setLidarData = this.store
         if (this.ws == null) {
             this.ws = new WebSocket(this.options.url)
             console.log("New web socket instance is created")
@@ -54,7 +57,7 @@ export class WSServices {
         this.ws.onmessage = (event) => {
             const points_received = JSON.parse(event.data)
             console.log("received data from LIDAR: " + points_received)
-            this.store.ADD_LIDAR_DATA(points_received)
+            this.setLidarData(points_received)
         }
     }
 

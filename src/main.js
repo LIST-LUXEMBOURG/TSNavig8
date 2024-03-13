@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 import App from './App.vue'
 import { WSServices} from "@/wsservices/WebSocketServices";
 import {usePointsStore} from "@/store/pointsStore";
+import 'bootstrap/dist/css/bootstrap.css'
 
 const pinia = createPinia()
 const app = createApp(App)

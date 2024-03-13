@@ -18,16 +18,16 @@ defineProps({
 </script>
 
 <template>
-    <div class="container">
+    <div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="grid-item">
+                  <div class="d-flex flex-column">
                     <h1>{{ title }}</h1>
                     <PlotLidarComponent/>
+                  </div>
                 </div>
             </div>
-
-/
         </div>
 
 <!--        <div class="row">-->
