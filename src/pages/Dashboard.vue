@@ -25,6 +25,7 @@ defineProps({
                   <div class="d-flex flex-column">
                     <h1>{{ title }}</h1>
                     <PlotLidarComponent/>
+                    
                   </div>
                 </div>
             </div>
