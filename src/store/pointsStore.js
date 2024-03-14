@@ -11,7 +11,7 @@ export const usePointsStore = defineStore('lidarData', {
     actions: {
         setLidarData(lidarData) {
             this.lidarData = lidarData
-            console.log("lidarData: " + JSON.stringify(this.getLidarData))
+            //console.log("lidarData: " + JSON.stringify(this.getLidarData))
         }
     }
 })

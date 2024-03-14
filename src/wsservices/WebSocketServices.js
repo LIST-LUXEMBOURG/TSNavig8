@@ -56,8 +56,19 @@ export class WSServices {
 
         this.ws.onmessage = (event) => {
             const points_received = JSON.parse(event.data)
-            console.log("received data from LIDAR: " + points_received)
-            this.setLidarData(points_received)
+            if (points_received.point_cloud) {
+                let data_temp = JSON.parse(points_received.point_cloud)
+               // console.log(typeof data_temp)
+                // console.log("received data from LIDAR: " + points_received.point_cloud)
+            //     console.log("received data[0][1] from LIDAR: " + data_temp[0][0])
+            //    console.log("received data[0][1] from LIDAR: " + data_temp[0][1])
+            //    console.log("received data[0][1] from LIDAR: " + data_temp[0][2])
+            //    console.log("length: " + data_temp.length)
+                this.store.setLidarData(data_temp)
+                
+            }
+          
+            
         }
     }
 

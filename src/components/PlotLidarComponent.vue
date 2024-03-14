@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column">
-    <p>{{ pointsData }}</p>
+   <!-- <p>{{ pointsData }}</p>  -->
     <canvas id="lidar-container"></canvas>
 <!--    <p></p>-->
-    <button class="btn btn-primary m-2" @click="increase">increase</button>
+    <button class="btn btn-primary m-2" @click="updateScene">increase</button>
   </div>
   </template>
 
@@ -15,10 +15,41 @@
   const $wsServices = inject('$wsServices')
   const store = usePointsStore()
   let pointsData = computed( () => {return store.getLidarData} )
+
+  function updateScene() {
+    console.log("pointsData: " + pointsData.value)
+    const positions = new Float32Array(pointsData.value.length * 3); // Each point has x, y, z coordinates
+      const colors = new Float32Array(pointsData.value.length * 3); // Each point has r, g, b colors
+      for (let i = 0; i < pointsData.value.length; i++) {
+        positions[i * 3] = pointsData.value[i][0];
+          positions[i * 3 + 1] = pointsData.value[i][1];
+          positions[i * 3 + 2] = pointsData.value[i][2];
+           //   // Set color data (white)
+          colors[i * 3] = 1.0;
+          colors[i * 3 + 1] = 1.0;
+          colors[i * 3 + 2] = 1.0;
+        }
+      geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)) 
+      // sprite = new THREE.TextureLoader().load( 'disc.png' );
+      material = new THREE.PointsMaterial({
+        size: 0.1, // Adjust the size of the sprite
+        map: sprite,
+        vertexColors: true // Enable vertex colors
+      });
+
+      pointsThree = new THREE.Points(geometry, material);
+      
+      console.log("pointsThree: " + JSON.stringify(pointsThree))
+      scene.add(pointsThree);
+      const tmp =  scene.toJSON()['geometries'][0]['data']['attributes']['position']['array']
+      console.log("scene " + JSON.stringify(tmp).length)
+      
+      animate()
+    //console.log('scene ' + JSON.stringify(scene))
+  }
   //console.log("points: " + JSON.stringify(points))
-
-  let p = ref(0)
-
   let canvas = null
   let scene = null
   let camera = null
@@ -31,80 +62,34 @@
   onMounted(() => {
     $wsServices.connect()
 
-    init();
-//    store.setLidarData([10, 20, 30])
+    initCanvas();
+   // setInterval(updateScene(), 1000)
+
   })
 
-  const animate = () => {
+  function initCanvas() {
+    // Create scene
+    scene = new THREE.Scene();
+
+    // Create camera
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    //console.log("camera: " + JSON.stringify(camera))
+    camera.position.z =5;
+
+    // Create renderer
+    canvas = document.getElementById('lidar-container');
+    renderer = new THREE.WebGLRenderer({antialias: true, canvas:canvas});
+
+    sprite = new THREE.TextureLoader().load( 'disc.png' );
+
+  }
+
+  function animate()  {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+    console.log('animate!')
   }
 
-  function init() {
-
-      // Create scene
-      scene = new THREE.Scene();
-
-      // Create camera
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-//      console.log("camera: " + JSON.stringify(camera))
-      camera.position.z = 10;
-
-      // Create renderer
-      canvas = document.getElementById('lidar-container');
-      renderer = new THREE.WebGLRenderer({antialias: true, canvas:canvas});
-//      renderer.setSize(window.innerWidth/2, window.innerHeight/2);
-
-//      console.log("renderer: " + JSON.stringify(renderer))
-//      document.getElementById('container').appendChild(renderer.domElement);
-
-      const numPoints=100
-      const positions = new Float32Array(numPoints * 3); // Each point has x, y, z coordinates
-      const colors = new Float32Array(numPoints * 3); // Each point has r, g, b colors
-
-      for (let i = 0; i < numPoints; i++) {
-
-         // Generate random point coordinates
-        const x = Math.random() * 20 - 10; // Adjust range as needed
-        const y = Math.random() * 20 - 10;
-        const z = Math.random() * 20 - 10;
-
-        // Set position data
-        positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
-
-        // Set color data (white)
-        colors[i * 3] = 1.0;
-        colors[i * 3 + 1] = 1.0;
-        colors[i * 3 + 2] = 1.0;
-      }
-
-      geometry = new THREE.BufferGeometry();
-      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-//      console.log("geometry: " + JSON.stringify(geometry))
-
-      // Create a sprite material for changing the shape of the points
-      sprite = new THREE.TextureLoader().load( 'disc.png' );
-      // sprite.colorSpace = THREE.SRGBColorSpace;
-      material = new THREE.PointsMaterial({
-        size: 0.1, // Adjust the size of the sprite
-        map: sprite,
-        vertexColors: true // Enable vertex colors
-      });
-
-      pointsThree = new THREE.Points(geometry, material);
-      scene.add(pointsThree);
-
-      // Start rendering loop
-      animate();
-  }
-
-  function increase() {
-    store.setLidarData([p.value, p.value*2, p.value*3])
-    p.value++
-  }
   </script>
 
   <style scoped>
