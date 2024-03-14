@@ -185,7 +185,7 @@ def convert_data_blocks_to_point_cloud(data_blocks):
             x = distance * math.cos(math.radians(vertical_angle)) * math.sin(azimuth)
             y = distance * math.cos(math.radians(vertical_angle)) * math.cos(azimuth)
             z = distance * math.sin(math.radians(vertical_angle))
-            point_cloud.append([x, y, z, reflectivity])
+            point_cloud.append([x, y, z, reflectivity, distance])
     return point_cloud
 
 # UDP listener function
