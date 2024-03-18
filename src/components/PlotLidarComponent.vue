@@ -1,127 +1,152 @@
 <template>
-  <div class="d-flex flex-column">
-    <!-- <p>{{ pointsData }}</p>  -->
+  <div class="container-fluid">
     <canvas id="lidar-container"></canvas>
-    <!--    <p></p>-->
-    <button class="btn btn-primary m-2" @click="updateScene">increase</button>
+    <div class="container">
+      <div class="d-flex">
+        <button class="btn byn-danger m-2" @click.prevent="stop">STOP</button>
+        <button class="btn byn-primary m-2" @click.prevent="start">START</button>
+        <button class="btn byn-primary m-2" @click.prevent="increaseCamera">Z CAMERA +</button>
+        <button class="btn byn-primary m-2" @click.prevent="decreaseCamera">Z CAMERA -</button>
+
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script setup>
 import * as THREE from 'three';
-import { onMounted, ref, inject, computed } from "vue";
-import { usePointsStore } from "@/store/pointsStore";
+import { onMounted, ref, inject, computed, onDeactivated } from "vue";
 
-const $wsServices = inject('$wsServices')
-const store = usePointsStore()
-let pointsData = computed(() => { return store.getLidarData })
+const $wsServices = inject('$wsservices')
+let pointsData = computed(() => { return $wsServices.getStore().getLidarData })
+console.log("Lidar: ",pointsData)
+let cameraZ=ref(500)
 
-
-//console.log("points: " + JSON.stringify(points))
-let canvas = null
 let scene = null
 let camera = null
 let renderer = null
-let geometry = null
-let sprite = null
-let material = ref(null)
-let pointsThree = ref(null)
-let counter = 0
+let material = null
+
 
 onMounted(() => {
   $wsServices.connect()
-
-  initCanvas();
-  // watch(pointsData, () => {
-  //   updateScene()
-  // })
-//     // setInterval(updateScene, 10);
-  
-// })
-   // Clean the scene every 20 seconds
-   
-  // updateScene()
-  // setInterval(clearScene(), 500)
-
+  sceneInitialisation()
+  displayPoints()
 })
-function clearScene() {
-  console.log("Clearing scene...");
-  scene = new THREE.Scene();
-  geometry = new THREE.BufferGeometry();
-  // scene.remove(pointsThree.value);
-  // pointsThree.value = null;
-  // setTimeout(1000);
-}
 
-function initCanvas() {
+onDeactivated(() => {
+  $wsServices.disconnect();
+  $wsServices.getStore().setLidarData([]);
+})
+
+function sceneInitialisation() {
   // Create scene
   scene = new THREE.Scene();
-
   // Create camera
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1300);
   //console.log("camera: " + JSON.stringify(camera))
-  camera.position.z = 500;
+  camera.position.z = cameraZ.value;
 
   // Create renderer
-  canvas = document.getElementById('lidar-container');
+  const canvas = document.getElementById('lidar-container');
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize(window.innerWidth/2, 3*window.innerHeight/4)
-  // geometry = new THREE.BufferGeometry(); // if you put it here, it contains only a set of points.
+  renderer.setSize(1080, 800)
 
-  sprite = new THREE.TextureLoader().load('disc.png');
+  const sprite = new THREE.TextureLoader().load('disc.png');
   material = new THREE.PointsMaterial({
     size: 0.1, // Adjust the size of the sprite
     map: sprite,
     vertexColors: true // Enable vertex colors
   });
-  animate()
+  // console.log('Scene initialised')
+  // animate()
  
 }
-function updateScene() {
-   // Clear the scene
-  //  scene.remove(pointsThree.value);
-  // scene = new THREE.Scene();
-  // console.log("pointsData: " + pointsData.value)
+function displayPoints() {
   const positions = new Float32Array(pointsData.value.length * 3); // Each point has x, y, z coordinates
-  const colors = new Float32Array(pointsData.value.length * 3); // Each point has r, g, b colors
+  const colors = new Float32Array(pointsData.value.length* 3); // Each point has r, g, b colors
+  const geometry = new THREE.BufferGeometry();
   for (let i = 0; i < pointsData.value.length; i++) {
-    positions[i * 3] = pointsData.value[i][0];
-    positions[i * 3 + 1] = pointsData.value[i][1];
-    positions[i * 3 + 2] = pointsData.value[i][2];
+    if ($wsServices.getStore().getLidarData[i] !== undefined)
+    {
+      // console.log('Display points')
+      positions[i * 3] = $wsServices.getStore().getLidarData[i][0];
+      positions[i * 3 + 1] = $wsServices.getStore().getLidarData[i][1];
+      positions[i * 3 + 2] = $wsServices.getStore().getLidarData[i][2];
 
-    let dst = pointsData.value[i][4]; // distance in cm
-    // let refl = pointsData.value[i][3]; // reflectivity (intensity)
+      let dst = $wsServices.getStore().getLidarData[i][4]; // distance in cm
+      // let refl = pointsData.value[i][3]; // reflectivity (intensity)
 
-    // console.log('distance: ', pointsData.value[i][4])
-    let clr = dst/255;
-      colors[i * 3] = 1-clr;
-      colors[i * 3 + 1] = clr;
-      colors[i * 3 + 2] =clr ;
+      let clr = dst/255;
+        colors[i * 3] = 1 - clr;
+        colors[i * 3 + 1] = clr;
+        colors[i * 3 + 2] = clr ;
+    }
+    setInterval(10000)
+    // else{
+    //   console.log('else')
+    // }
   }
-  geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-  geometry.needsUpdate = true;
- 
-  pointsThree = new THREE.Points(geometry, material);
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  const pointsThree = new THREE.Points(geometry, material);
   scene.add(pointsThree);
-  
-  animate()
-  counter++;
-  // console.log("counter ", counter)
-  if (counter==10){
-    counter=0;
-    clearScene();
-  }
+  animate();
 }
 function animate() {
+  scene.remove.apply(scene, scene.children)
+  const positions = new Float32Array(pointsData.value.length*3);
+  const colors = new Float32Array(pointsData.value.length*3);
+  for (let i = 0; i < pointsData.value.length; i++) {
+    if ($wsServices.getStore().getLidarData[i] !== undefined)
+    {
+      positions[i * 3] = $wsServices.getStore().getLidarData[i][0];
+      positions[i * 3 + 1] = $wsServices.getStore().getLidarData[i][1];
+      positions[i * 3 + 2] = $wsServices.getStore().getLidarData[i][2];
+
+      let dst = $wsServices.getStore().getLidarData[i][4]; // distance in cm
+      // let refl = pointsData.value[i][3]; // reflectivity (intensity)
+
+      // console.log('distance: ', pointsData.value[i][4])
+      let clr = dst/255;
+        colors[i * 3] = 1-clr;
+        colors[i * 3 + 1] = clr;
+        colors[i * 3 + 2] =clr ;
+    }
+    // else{
+    //   console.log('Here')
+    // }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  geometry.needsUpdate = true
+  material.needsUpdate = true
+  const pointsThree = new THREE.Points(geometry, material);
+  scene.add(pointsThree);
+  camera.position.z = cameraZ.value
+
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  // setInterval(clearScene, 1000);
+}
 
-  // setTimeout(1000000);
+function stop(){
+  $wsServices.disconnect();
+}
 
-  // console.log('animate!')
+function start(){
+  $wsServices.connect();
+  displayPoints();
+}
+
+function increaseCamera(){
+  cameraZ.value = cameraZ.value+40
+}
+
+function decreaseCamera(){
+  cameraZ.value = cameraZ.value-40
+  if (cameraZ.value <=0) cameraZ.value = 0
 }
 
 </script>

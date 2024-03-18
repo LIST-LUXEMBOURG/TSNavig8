@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 
-export const usePointsStore = defineStore('lidarData', {
+export const usePointsStore = defineStore('pointsStore', {
     state: () => ({
             lidarData: [],
         })
@@ -9,9 +9,9 @@ export const usePointsStore = defineStore('lidarData', {
         getLidarData: state => state.lidarData,
     },
     actions: {
-        setLidarData(lidarData) {
-            this.lidarData = lidarData
-            //console.log("lidarData: " + JSON.stringify(this.getLidarData))
+        setLidarData(lidarData_) {
+            this.lidarData = lidarData_
+            // console.log("lidarData: " + JSON.stringify(this.getLidarData))
         }
     }
 })

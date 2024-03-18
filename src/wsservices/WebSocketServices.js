@@ -1,19 +1,19 @@
-import {inject} from "vue";
+// import {inject} from "vue";
 
 export class WSServices {
 
-    constructor(options) {
+    constructor(store, options) {
         this.ws = null
         this.options = options
-        this.store = null
+        this.store = store
         this.setLidarData = null
-        this.id_client = -1
+        // this.id_client = -1
         this.reconnectInterval = options.reconnectInterval || 1000
     }
 
     connect() {
-        this.store = inject("$lidarDataStore")
-        this.setLidarData = this.store
+        // this.store = inject("$lidarDataStore")
+        // this.setLidarData = this.store
         if (this.ws == null) {
             this.ws = new WebSocket(this.options.url)
             console.log("New web socket instance is created")
@@ -58,13 +58,7 @@ export class WSServices {
             const points_received = JSON.parse(event.data)
             if (points_received.point_cloud) {
                 let data_temp = JSON.parse(points_received.point_cloud)
-               // console.log(typeof data_temp)
-                // console.log("received data from LIDAR: " + points_received.point_cloud)
-            //     console.log("received data[0][1] from LIDAR: " + data_temp[0][0])
-            //    console.log("received data[0][1] from LIDAR: " + data_temp[0][1])
-            //    console.log("received data[0][1] from LIDAR: " + data_temp[0][2])
-            //    console.log("length: " + data_temp.length)
-                this.store.setLidarData(data_temp)
+                this.getStore().setLidarData(data_temp)
                 
             }
           
@@ -79,5 +73,9 @@ export class WSServices {
             // this.store.clearMsgAlerts()
             console.log("web socket instance is destroyed!")
         }
+    }
+
+    getStore(){
+        return this.store;
     }
 }
