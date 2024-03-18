@@ -3,6 +3,7 @@ import json
 import socket
 import base64
 import math
+import datetime
 from threading import Thread
 from websocket_server import WebsocketServer
 
@@ -15,6 +16,7 @@ udp_host = '192.168.4.102'
 udp_port = 6699
 host = '10.121.11.69'
 port = 8765
+current_timestamp = -1
 # Mapping of channel numbers to vertical angles
 channel_vertical_angles = {
     16: 10, 32: 7, 14: 5, 30: 3.5, 31: 3, 7: 2.5, 12: 2, 23: 1.5,
@@ -180,7 +182,7 @@ def convert_data_blocks_to_point_cloud(data_blocks):
             distance, reflectivity = channel_data[j]
             channel_number = j + 1 
             vertical_angle =  channel_vertical_angles.get(channel_number, None)
-
+            # print(vertical_angle)
             # Convert polar coordinates to Cartesian coordinates
             x = distance * math.cos(math.radians(vertical_angle)) * math.sin(azimuth)
             y = distance * math.cos(math.radians(vertical_angle)) * math.cos(azimuth)
@@ -190,29 +192,39 @@ def convert_data_blocks_to_point_cloud(data_blocks):
 
 # UDP listener function
 def start_udp_listener(udp_host, udp_port, logger, server_notif):
+    global current_timestamp
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             s.bind((udp_host, udp_port))
             logger.info(f"UDP server listening on {udp_host}:{udp_port}")
-
+            sequence_cloud=[]
+            start_time = current_timestamp
+            threshold_time=0.1
             while True:
                 data, addr = s.recvfrom(HEADER_SIZE + (DATA_BLOCK_SIZE * NUMBER_OF_BLOCKS) + TAIL_SIZE)  # Adjust buffer size as needed
 
                 try:
                     lidar_data = parse_udp_packet(data)
                     point_cloud = convert_data_blocks_to_point_cloud(lidar_data['Data Blocks'])
-
+                    sequence_cloud.extend(point_cloud)
+                    elapsed_time = current_timestamp-start_time
+                    if elapsed_time>=threshold_time:
+                        # print(elapsed_time)
                     # Convert point cloud to JSON
-                    json_point_cloud = json.dumps(point_cloud)
+                        json_point_cloud = json.dumps(sequence_cloud)
+                        start_time=current_timestamp
+                        sequence_cloud=[]
 
-                    # Send UDP data as a notification to all connected clients
-                    notification = {
-                        "type": "udp_notification",
-                        "point_cloud": json_point_cloud,
-                        "addr": addr[0],
-                        "port": addr[1]
-                    }
-                    server_notif.send_message_to_all(json.dumps(notification))
+                        # Send UDP data as a notification to all connected clients
+                        notification = {
+                            "type": "udp_notification",
+                            "point_cloud": json_point_cloud,
+                            "addr": addr[0],
+                            "port": addr[1]
+                        }
+                        # time.sleep(1)
+                        # print(datetime.datetime.now().time())
+                        server_notif.send_message_to_all(json.dumps(notification))
 
                 except Exception as e:
                     logger.error(f"Error processing UDP data: {e}")

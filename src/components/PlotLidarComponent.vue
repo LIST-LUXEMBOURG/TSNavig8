@@ -79,11 +79,10 @@ function displayPoints() {
       // let refl = pointsData.value[i][3]; // reflectivity (intensity)
 
       let clr = dst/255;
-        colors[i * 3] = 1 - clr;
+        colors[i * 3] = 1-clr;
         colors[i * 3 + 1] = clr;
-        colors[i * 3 + 2] = clr ;
+        colors[i * 3 + 2] = clr;
     }
-    setInterval(10000)
     // else{
     //   console.log('else')
     // }
@@ -93,6 +92,10 @@ function displayPoints() {
   const pointsThree = new THREE.Points(geometry, material);
   scene.add(pointsThree);
   animate();
+  // geometry.dispose()
+  // positions.dispose()
+  // colors.dispose()
+  // pointsThree.dispose()
 }
 function animate() {
   scene.remove.apply(scene, scene.children)
@@ -112,7 +115,7 @@ function animate() {
       let clr = dst/255;
         colors[i * 3] = 1-clr;
         colors[i * 3 + 1] = clr;
-        colors[i * 3 + 2] =clr ;
+        colors[i * 3 + 2] = clr;
     }
     // else{
     //   console.log('Here')
