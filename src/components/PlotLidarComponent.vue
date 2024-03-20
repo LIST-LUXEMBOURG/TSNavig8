@@ -3,8 +3,12 @@
     <canvas id="lidar-container"></canvas>
     <div class="container">
       <div class="d-flex">
-        <button class="btn byn-danger m-2" @click.prevent="stop">STOP</button>
-        <button class="btn byn-primary m-2" @click.prevent="start">START</button>
+        <button class="btn byn-primary m-2" @click.prevent="start">START LIDAR</button>
+        <button class="btn byn-danger m-2" @click.prevent="stop">STOP LIDAR</button>
+        <button class="btn byn-primary m-2" @click.prevent="enableTas">ENABLE TAS</button>
+        <button class="btn byn-danger m-2" @click.prevent="disableTas">DISABLE TAS</button>
+        <button class="btn byn-primary m-2" @click.prevent="enableNoise">START NOISE</button>
+        <button class="btn byn-danger m-2" @click.prevent="disableNoise">STOP NOISE</button>
       </div>
 
     </div>
@@ -23,7 +27,7 @@ let camera = null
 let renderer = null
 let material = null
 let controls = null
-
+// var exec = require('child_process').exec;
 onMounted(() => {
   $wsServices.connect()
   sceneInitialisation()
@@ -57,7 +61,7 @@ function sceneInitialisation() {
   controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
   controls.mouseButtons.RIGHT = THREE.MOUSE.PAN;  
   controls.maxDistance = 1500;
-  controls.minDistance = 0;
+  // controls.minDistance = 0;
   // controls.rotateSpeed = 0.5;
   // controls.panSpeed = 0.5;
   // controls.screenSpacePanning = false;
@@ -69,7 +73,7 @@ function sceneInitialisation() {
 
   const sprite = new THREE.TextureLoader().load('disc.png');
   material = new THREE.PointsMaterial({
-    size: 0.1, // Adjust the size of the sprite
+    size:2, // Adjust the size of the sprite
     map: sprite,
     vertexColors: true // Enable vertex colors
   });
@@ -152,6 +156,41 @@ function start(){
   $wsServices.connect();
   displayPoints();
 }
+
+function enableTas(){
+  $wsServices.enableTas();
+}
+
+function disableTas(){
+  $wsServices.disableTas();
+}
+
+function enableNoise(){
+  $wsServices.enableNoise();
+}
+
+function disableNoise(){
+  $wsServices.disableNoise();
+}
+
+// const { exec } = require("child_process");
+// function enableAs(){
+// exec("ls -la", (error, stdout, stderr) => {
+//     if (error) {
+//         console.log(`error: ${error.message}`);
+//         return;
+//     }
+//     if (stderr) {
+//         console.log(`stderr: ${stderr}`);
+//         return;
+//     }
+//     console.log(`stdout: ${stdout}`);
+// })
+// }
+// function enableAs(){
+//         exec("systemctl start ptp4l");
+//         console.log("802.1AS started");
+//     };
 
 </script>
 

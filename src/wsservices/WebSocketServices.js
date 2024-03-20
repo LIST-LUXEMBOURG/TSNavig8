@@ -1,5 +1,3 @@
-// import {inject} from "vue";
-
 export class WSServices {
 
     constructor(store, options) {
@@ -7,13 +5,10 @@ export class WSServices {
         this.options = options
         this.store = store
         this.setLidarData = null
-        // this.id_client = -1
         this.reconnectInterval = options.reconnectInterval || 1000
     }
 
     connect() {
-        // this.store = inject("$lidarDataStore")
-        // this.setLidarData = this.store
         if (this.ws == null) {
             this.ws = new WebSocket(this.options.url)
             console.log("New web socket instance is created")
@@ -49,20 +44,20 @@ export class WSServices {
                 }
             }
         }
+       
 
         this.ws.onerror = (error) => {
             console.error(error)
         }
+        
 
         this.ws.onmessage = (event) => {
             const points_received = JSON.parse(event.data)
+            // this.ws.send("test")
             if (points_received.point_cloud) {
                 let data_temp = JSON.parse(points_received.point_cloud)
-                this.getStore().setLidarData(data_temp)
-                
-            }
-          
-            
+                this.getStore().setLidarData(data_temp)   
+            }           
         }
     }
 
@@ -78,4 +73,30 @@ export class WSServices {
     getStore(){
         return this.store;
     }
+
+    enableTas(){
+        if (this.ws != null)
+        {
+            this.ws.send('enable-tas')
+        }
+    }
+    disableTas(){
+        if (this.ws != null)
+        {
+            this.ws.send('disable-tas')
+        }
+    }
+    enableNoise(){
+        if (this.ws != null)
+        {
+            this.ws.send('enable-noise')
+        }
+    }
+    disableNoise(){
+        if (this.ws != null)
+        {
+            this.ws.send('disable-noise')
+        }
+    }
+
 }

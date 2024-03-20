@@ -6,7 +6,7 @@ import math
 import datetime
 from threading import Thread
 from websocket_server import WebsocketServer
-
+import subprocess
 # Constants for header and data block sizes
 HEADER_SIZE = 42
 DATA_BLOCK_SIZE = 100
@@ -14,7 +14,7 @@ NUMBER_OF_BLOCKS = 12
 TAIL_SIZE = 6
 udp_host = '192.168.4.102'
 udp_port = 6699
-host = '10.121.11.69'
+host = '10.150.2.5'
 port = 8765
 current_timestamp = -1
 # Mapping of channel numbers to vertical angles
@@ -199,7 +199,7 @@ def start_udp_listener(udp_host, udp_port, logger, server_notif):
             logger.info(f"UDP server listening on {udp_host}:{udp_port}")
             sequence_cloud=[]
             start_time = current_timestamp
-            threshold_time=0.1
+            threshold_time=0.13
             while True:
                 data, addr = s.recvfrom(HEADER_SIZE + (DATA_BLOCK_SIZE * NUMBER_OF_BLOCKS) + TAIL_SIZE)  # Adjust buffer size as needed
 
@@ -238,7 +238,37 @@ def new_client(client, server):
     logger.info('A new client is registered for NOTIFICATIONS: %s', client)
 
 def message_received(client, server, message):
-    logger.info('NOTIFICATION {} received from {}'.format(message, client))
+    if message == "enable-tas":
+        try:           
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test1-tas.json', '-n', '1'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+    # elif message == "config-tas":
+    #     try:           
+    #         subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test2-tas.json', '-n', '1'], check=True)
+    #     except subprocess.CalledProcessError as e:
+    #         print(f"Error executing command: {e}")
+    elif message == "disable-tas":
+        try:           
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/disable-tas.json', '-n', '1'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+    elif message == "enable-noise":
+        try:           
+            subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'start_traf_gen.py', '--port', '0'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+    # python3 start_traf_gen.py --port 0
+    elif message == "disable-noise":
+        try:           
+            subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'stop_traf_gen.py', '--port', '0'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+    else:
+        logger.info('NOTIFICATION {} received from {}'.format(message, client))
+
+    # subprocess.run(['echo', 'Good_job'], check=True)
+
 
 def client_left(client, server):
     logger.info('Client left: {0}'.format(client))
@@ -254,6 +284,8 @@ udp_thread.start()
 server_notif.set_fn_new_client(new_client)
 server_notif.set_fn_message_received(message_received)
 server_notif.set_fn_client_left(client_left)
+
+
 
 logger.info('The WebSocket server (NOTIFICATIONS) is up and running...')
 
