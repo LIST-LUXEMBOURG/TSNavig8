@@ -4,6 +4,7 @@ import { defineProps } from 'vue';
 // import PlotComponent from '@/components/PlotComponent.vue';
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
 import TasComponent from '@/components/TasComponent.vue';
+import NoiseComponent from '@/components/NoiseComponent.vue';
 defineProps({
     title:{
         type: String,
@@ -13,7 +14,8 @@ defineProps({
         // PlotComponent,
         // WebSocketHandler2,
         PlotLidarComponent,
-        TasComponent
+        TasComponent,
+        NoiseComponent
     }
 })
 </script>
@@ -27,6 +29,7 @@ defineProps({
                     <h1>{{ title }}</h1>
                     <PlotLidarComponent/>
                     <TasComponent/>
+                    <NoiseComponent/>
                     
                   </div>
                 </div>

@@ -9,6 +9,8 @@
         <button class="btn byn-danger m-2" @click.prevent="disableTas">DISABLE TAS</button>
         <button class="btn byn-primary m-2" @click.prevent="enableNoise">START NOISE</button>
         <button class="btn byn-danger m-2" @click.prevent="disableNoise">STOP NOISE</button>
+        <button class="btn byn-danger m-2" @click.prevent="negativeTest">NEGATIVE TEST</button>
+
       </div>
     </div>
   </div>
@@ -170,6 +172,10 @@ function enableNoise(){
 
 function disableNoise(){
   $wsServices.disableNoise();
+}
+
+function negativeTest(){
+  $wsServices.negativeTest();
 }
 </script>
 

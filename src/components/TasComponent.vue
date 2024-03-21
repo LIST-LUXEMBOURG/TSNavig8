@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div style="padding-top: 2%;">
         <h3>Configure the Time-Aware Shaper</h3>
-        <table cellpadding="" cellspacing="50px" style="width: 55%;">
+        <table cellpadding="" cellspacing="30px" style="width: 50%;">
             <tr>
                 <td><b>Number of Slots</b> </td>
                 <td><input type="number" v-model="slotCount" min="1" step="1"></td>
@@ -9,17 +9,17 @@
         </table>
         <table cellpadding="" cellspacing="50px" style="width: 55%;"> 
             <thead>
-                <tr>
+                <tr >
                     <th>Slot duration (ns)</th>
                     <th>Slot number</th>
-                    <th>Q7</th>
-                    <th>Q6</th>
-                    <th>Q5</th>
-                    <th>Q4</th>
-                    <th>Q3</th>
-                    <th>Q2</th>
-                    <th>Q1</th>
-                    <th>Q0</th>
+                    <th  style="text-align: center;">Q7</th>
+                    <th  style="text-align: center;">Q6</th>
+                    <th  style="text-align: center;">Q5</th>
+                    <th  style="text-align: center;">Q4</th>
+                    <th  style="text-align: center;">Q3</th>
+                    <th  style="text-align: center;">Q2</th>
+                    <th  style="text-align: center;">Q1</th>
+                    <th  style="text-align: center;">Q0</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,13 +80,20 @@ function generateJSON() {
 
     // Adjust the denominator accordingly
     let denominator = Math.pow(10, 9-numZeros);
-
+    if (slotCount.value < 1 ) {
+            alert("Number of slots must be greater than 0.");
+            return;
+        }
     for (let rowIndex = 0; rowIndex < slotData.value.length; rowIndex++) {
         let gateStatesValue = 0;
         for (let i = 0; i < 8; i++) {
             if (slotData.value[rowIndex][`q${i}`]) {
                 gateStatesValue |= 1 << i;
             }
+        }
+        if ( slotData.value[rowIndex].duration < 1000 ) {
+            alert("Slot duration must be greater than 1000 ns.");
+            return;
         }
 
         controlList.push({

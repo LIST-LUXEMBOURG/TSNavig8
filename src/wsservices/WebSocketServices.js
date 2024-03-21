@@ -106,4 +106,18 @@ export class WSServices {
         }
     }
 
+    configureNoise(text){
+        if (this.ws != null)
+        {
+            this.ws.send(text)
+        }
+    }
+
+    negativeTest(){
+        if (this.ws != null)
+        {
+            this.ws.send('negative-tas')
+        }
+    }
+
 }

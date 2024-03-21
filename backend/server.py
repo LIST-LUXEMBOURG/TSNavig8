@@ -248,14 +248,19 @@ def message_received(client, server, message):
     #         subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test2-tas.json', '-n', '1'], check=True)
     #     except subprocess.CalledProcessError as e:
     #         print(f"Error executing command: {e}")
+    elif message == "negative-tas":
+        try:           
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test1-tas.json', '-n', '1'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
     elif message == "disable-tas":
         try:           
-            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/disable-tas.json', '-n', '1'], check=True)
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/disable-tas.json', '-n', '1'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
     elif message == "enable-noise":
         try:          
-            subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'config_traf_gen.py', '--port', '0', '-s', '1500', '-vtag', '1', '-p', '5', '-vid', '300', '-pr', '100'], check=True)
+            # subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'config_traf_gen.py', '--port', '0', '-s', '1500', '-vtag', '1', '-p', '5', '-vid', '300', '-pr', '100'], check=True)
             subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'start_traf_gen.py', '--port', '0'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
@@ -266,13 +271,6 @@ def message_received(client, server, message):
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
     elif "qbv_gate_parameters" in message:
-        # is the TAS configuration
-        # print(type(message)) 
-        #convert string to  object
-        # json_object = json.loads(message)
-        # Writing to sample.json
-        # /usr/local/src/tsn_lidar
-
         with open("tas.json", "w") as outfile:
             outfile.write(message)
         try:
@@ -280,11 +278,17 @@ def message_received(client, server, message):
             subprocess.run(['scp', 'tas.json', 'relyum@192.168.4.64:/usr/local/src/tsn_lidar'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
+    elif "--frame_size" in message:
+        # print("Noise message: ", message.split(' '))
+        try:          
+            tmp = ['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'config_traf_gen.py', '--port', '0', '-vtag', '1', '-vid', '300']
+            tmp.extend(message.split(' '))
+            subprocess.run(tmp, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
             
     else:
         logger.info('NOTIFICATION {} received from {}'.format(message, client))
-
-    # subprocess.run(['echo', 'Good_job'], check=True)
 
 
 def client_left(client, server):
