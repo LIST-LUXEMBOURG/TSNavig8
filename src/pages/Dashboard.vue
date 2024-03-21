@@ -1,18 +1,12 @@
 <script setup>
 import { defineProps } from 'vue';
-// import WebSocketHandler2 from '@/components/WebSocketHandler2.vue';
-// import PlotComponent from '@/components/PlotComponent.vue';
+import HeaderComponent from '@/components/HeaderComponent.vue';
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
 import TasComponent from '@/components/TasComponent.vue';
 import NoiseComponent from '@/components/NoiseComponent.vue';
 defineProps({
-    title:{
-        type: String,
-        required: true
-    },
     components:{
-        // PlotComponent,
-        // WebSocketHandler2,
+        HeaderComponent,
         PlotLidarComponent,
         TasComponent,
         NoiseComponent
@@ -22,37 +16,27 @@ defineProps({
 
 <template>
     <div>
+        <HeaderComponent title="Interactive Off-the-Shelf TSN Testbed"/>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="grid-item">
                   <div class="d-flex flex-column">
-                    <h1>{{ title }}</h1>
                     <PlotLidarComponent/>
-                    <TasComponent/>
-                    <NoiseComponent/>
-                    
                   </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="grid-item">
+                    <TasComponent/>
+                </div>
+                <div class="grid-item">
+                    <NoiseComponent/>
+                </div>
+            </div>
         </div>
-
-<!--        <div class="row">-->
-<!--            <div class="col-6">-->
-<!--                <div class="grid-item">-->
-<!--                    <h3>Text</h3>-->
-<!--                    &lt;!&ndash; Additional child component or content &ndash;&gt;-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="col-6">-->
-<!--                <div class="grid-item">-->
-<!--                    &lt;!&ndash; Additional child component or content &ndash;&gt;-->
-<!--                    <PlotComponent />-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </template>
+
 
 <style scoped>
 .grid-item {

@@ -1,13 +1,13 @@
 <template>
-    <div style="padding-top: 2%;">
+    <div style="margin-top: 2%;">
         <h3>Configure the Time-Aware Shaper</h3>
-        <table cellpadding="" cellspacing="30px" style="width: 50%;">
+        <table cellpadding="" cellspacing="30px" style="width: 100%;">
             <tr>
                 <td><b>Number of Slots</b> </td>
-                <td><input type="number" v-model="slotCount" min="1" step="1"></td>
+                <td><input type="number" v-model="slotCount" min="1" step="1"  style="width: 150px;"></td>
             </tr>
         </table>
-        <table cellpadding="" cellspacing="50px" style="width: 55%;"> 
+        <table cellpadding="" cellspacing="50px" style="width: 100%; margin-top: 2%;"> 
             <thead>
                 <tr >
                     <th>Slot duration (ns)</th>
@@ -25,7 +25,7 @@
             <tbody>
                 <tr v-for="(index, rowIndex) in slotData" :key="index">
                     <td>
-                        <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1" style="text-align: center;">
+                        <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1" style="text-align: center; width: 150px;">
                     </td>
                     <td>Slot {{ rowIndex }}</td>
                     <td style="text-align: center;">
@@ -55,7 +55,7 @@
                 </tr>
             </tbody>
         </table>
-        <button @click="generateJSON">Send Data</button>
+        <button @click="generateJSON" style="margin-top: 2%;">Send Data</button>
     </div>
 </template>
 

@@ -3,13 +3,13 @@
     <canvas id="lidar-container"></canvas>
     <div class="container">
       <div class="d-flex">
-        <button class="btn byn-primary m-2" @click.prevent="start">START LIDAR</button>
-        <button class="btn byn-danger m-2" @click.prevent="stop">STOP LIDAR</button>
-        <button class="btn byn-primary m-2" @click.prevent="enableTas">ENABLE TAS</button>
-        <button class="btn byn-danger m-2" @click.prevent="disableTas">DISABLE TAS</button>
-        <button class="btn byn-primary m-2" @click.prevent="enableNoise">START NOISE</button>
-        <button class="btn byn-danger m-2" @click.prevent="disableNoise">STOP NOISE</button>
-        <button class="btn byn-danger m-2" @click.prevent="negativeTest">NEGATIVE TEST</button>
+        <button class="btn btn-primary m-2" @click.prevent="start">START LIDAR</button>
+        <button class="btn btn-danger m-2" @click.prevent="stop">STOP LIDAR</button>
+        <button class="btn btn-primary m-2" @click.prevent="enableTas">ENABLE TAS</button>
+        <button class="btn btn-danger m-2" @click.prevent="disableTas">DISABLE TAS</button>
+        <button class="btn btn-primary m-2" @click.prevent="enableNoise">START NOISE</button>
+        <button class="btn btn-danger m-2" @click.prevent="disableNoise">STOP NOISE</button>
+        <button class="btn btn-info m-2" @click.prevent="negativeTest">NEGATIVE TEST</button>
 
       </div>
     </div>
@@ -179,4 +179,17 @@ function negativeTest(){
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn-primary { 
+  background: #50b948;
+  border-color: #33912c;
+}
+
+.btn-primary a {
+  color: #fafafa;
+}
+
+.btn-primary:hover { 
+  background: #33912c;
+}
+</style>
