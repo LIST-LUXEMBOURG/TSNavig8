@@ -3,7 +3,7 @@ import { defineProps } from 'vue';
 // import WebSocketHandler2 from '@/components/WebSocketHandler2.vue';
 // import PlotComponent from '@/components/PlotComponent.vue';
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
-
+import TasComponent from '@/components/TasComponent.vue';
 defineProps({
     title:{
         type: String,
@@ -12,7 +12,8 @@ defineProps({
     components:{
         // PlotComponent,
         // WebSocketHandler2,
-        PlotLidarComponent
+        PlotLidarComponent,
+        TasComponent
     }
 })
 </script>
@@ -25,6 +26,7 @@ defineProps({
                   <div class="d-flex flex-column">
                     <h1>{{ title }}</h1>
                     <PlotLidarComponent/>
+                    <TasComponent/>
                     
                   </div>
                 </div>

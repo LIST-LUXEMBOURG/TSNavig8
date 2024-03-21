@@ -10,7 +10,6 @@
         <button class="btn byn-primary m-2" @click.prevent="enableNoise">START NOISE</button>
         <button class="btn byn-danger m-2" @click.prevent="disableNoise">STOP NOISE</button>
       </div>
-
     </div>
   </div>
 </template>
@@ -172,26 +171,6 @@ function enableNoise(){
 function disableNoise(){
   $wsServices.disableNoise();
 }
-
-// const { exec } = require("child_process");
-// function enableAs(){
-// exec("ls -la", (error, stdout, stderr) => {
-//     if (error) {
-//         console.log(`error: ${error.message}`);
-//         return;
-//     }
-//     if (stderr) {
-//         console.log(`stderr: ${stderr}`);
-//         return;
-//     }
-//     console.log(`stdout: ${stdout}`);
-// })
-// }
-// function enableAs(){
-//         exec("systemctl start ptp4l");
-//         console.log("802.1AS started");
-//     };
-
 </script>
 
 <style scoped></style>

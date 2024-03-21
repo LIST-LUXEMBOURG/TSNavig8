@@ -99,4 +99,11 @@ export class WSServices {
         }
     }
 
+    sendTas(jsonFile){
+        if (this.ws != null)
+        {
+            this.ws.send(JSON.stringify(jsonFile))
+        }
+    }
+
 }
