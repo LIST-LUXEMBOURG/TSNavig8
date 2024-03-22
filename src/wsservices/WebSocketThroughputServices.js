@@ -49,13 +49,12 @@ export class WSTServices {
         }
         
 
-        this.ws.onmessage = (event) => {
-            const data_received = JSON.parse(event.data)
-            if (data_received.type == "bandwidth_update") {
-                // this.ws.send("test")
-                console.log("Throughput received from server: ", data_received)         
-        }
-    }
+        // this.ws.onmessage = (event) => {
+        //     const data_received = JSON.parse(event.data)
+        //     if (data_received.type == "bandwidth_update") {
+        //         console.log("Throughput received from server: ", data_received)         
+        // }
+    // }
     }
 
     disconnect() {
