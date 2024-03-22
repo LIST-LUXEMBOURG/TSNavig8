@@ -270,6 +270,12 @@ def message_received(client, server, message):
             subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'stop_traf_gen.py', '--port', '0'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
+    elif message == "reset-tas":
+        try:           
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/lidar_tas.json', '-n', '1'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+
     elif "qbv_gate_parameters" in message:
         with open("tas.json", "w") as outfile:
             outfile.write(message)

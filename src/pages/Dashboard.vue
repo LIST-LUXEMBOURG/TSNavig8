@@ -40,7 +40,7 @@ defineProps({
 
 <style scoped>
 .grid-item {
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
     padding: 10px;
     margin-bottom: 20px;
 }

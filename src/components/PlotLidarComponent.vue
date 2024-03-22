@@ -3,14 +3,15 @@
     <canvas id="lidar-container"></canvas>
     <div class="container">
       <div class="d-flex">
-        <button class="btn btn-primary m-2" @click.prevent="start">START LIDAR</button>
-        <button class="btn btn-danger m-2" @click.prevent="stop">STOP LIDAR</button>
-        <button class="btn btn-primary m-2" @click.prevent="enableTas">ENABLE TAS</button>
-        <button class="btn btn-danger m-2" @click.prevent="disableTas">DISABLE TAS</button>
-        <button class="btn btn-primary m-2" @click.prevent="enableNoise">START NOISE</button>
-        <button class="btn btn-danger m-2" @click.prevent="disableNoise">STOP NOISE</button>
-        <button class="btn btn-info m-2" @click.prevent="negativeTest">NEGATIVE TEST</button>
-
+        <button class="btn btn-success m-2" id="startButton" @click.prevent="start" >START LIDAR</button>
+        <button class="btn btn-danger m-2" id="stopButton" @click.prevent="stop" >STOP LIDAR</button>
+        <button class="btn btn-success m-2" id="enableTraffic" @click.prevent="enableNoise">START NOISE</button>
+        <button class="btn btn-danger m-2" id="disableTraffic" @click.prevent="disableNoise">STOP NOISE</button>
+        <!-- here should be new line -->
+        <button class="btn btn-success m-2" id ="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
+        <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button>
+        <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
+        <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">RESET TAS</button>
       </div>
     </div>
   </div>
@@ -28,7 +29,10 @@ let camera = null
 let renderer = null
 let material = null
 let controls = null
-// var exec = require('child_process').exec;
+let lidarRunning = true
+let tasRunning = false
+let trafficRunning = false
+
 onMounted(() => {
   $wsServices.connect()
   sceneInitialisation()
@@ -41,22 +45,19 @@ onDeactivated(() => {
 })
 
 function sceneInitialisation() {
+  updateButtonStates();
+  // updateTasButtonStates();
   // Create scene
   scene = new THREE.Scene();
   // Create camera
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1300);
-  //console.log("camera: " + JSON.stringify(camera))
-  // camera.position.z = cameraZ.value;
   camera.position.set(0,0, cameraZ.value)
   camera.lookAt(scene.position)
   // Create renderer
   const canvas = document.getElementById('lidar-container');
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize(1080, 800)
+  renderer.setSize(window.innerWidth/2, 3*window.innerHeight/4)
   
-  
-
-
   // Create controls
   controls = new OrbitControls(camera, renderer.domElement);
   controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
@@ -78,8 +79,6 @@ function sceneInitialisation() {
     map: sprite,
     vertexColors: true // Enable vertex colors
   });
-
- 
 }
 function displayPoints() {
   const positions = new Float32Array(pointsData.value.length * 3); // Each point has x, y, z coordinates
@@ -149,47 +148,70 @@ function animate() {
   // axesHelper.dispose()
 }
 
-function stop(){
+function stop() {
+  lidarRunning = false;
   $wsServices.disconnect();
+  updateButtonStates();
 }
 
-function start(){
+function start() {
+  lidarRunning = true;
   $wsServices.connect();
   displayPoints();
+  updateButtonStates();
 }
 
-function enableTas(){
+function updateButtonStates() {
+  updateButtonState("startButton", lidarRunning);
+  updateButtonState("stopButton", !lidarRunning);
+  updateButtonState("enableTraffic", trafficRunning);
+  updateButtonState("disableTraffic", !trafficRunning);
+  updateButtonState("enableTas", tasRunning);
+  updateButtonState("negativeTest", tasRunning);
+  updateButtonState("resetTas", tasRunning);
+  updateButtonState("disableTas", !tasRunning);
+}
+
+function updateButtonState(buttonId, running) {
+  document.getElementById(buttonId).disabled = running;
+}
+
+function enableTas() {
+  tasRunning = true;
   $wsServices.enableTas();
+  updateButtonStates();
 }
 
-function disableTas(){
+function disableTas() {
+  tasRunning = false;
   $wsServices.disableTas();
+  updateButtonStates();
 }
 
-function enableNoise(){
+function enableNoise() {
+  trafficRunning = true;
   $wsServices.enableNoise();
+  updateButtonStates();
 }
 
-function disableNoise(){
+function disableNoise() {
+  trafficRunning = false;
   $wsServices.disableNoise();
+  updateButtonStates();
 }
 
-function negativeTest(){
+function negativeTest() {
+  tasRunning = true;
   $wsServices.negativeTest();
+  updateButtonStates();
+}
+
+function resetTas() {
+  tasRunning = true;
+  $wsServices.resetTas();
+  updateButtonStates();
 }
 </script>
 
 <style scoped>
-.btn-primary { 
-  background: #50b948;
-  border-color: #33912c;
-}
-
-.btn-primary a {
-  color: #fafafa;
-}
-
-.btn-primary:hover { 
-  background: #33912c;
-}
 </style>

@@ -5,7 +5,7 @@ import Dashboard from '@/pages/Dashboard.vue';
 
 <template>
   <div class="container-fluid">
-        <Dashboard title="TSN" />
+        <Dashboard />
 <!--        <div>-->
 <!--    </div>-->
   </div>

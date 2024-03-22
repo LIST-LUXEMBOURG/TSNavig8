@@ -120,4 +120,11 @@ export class WSServices {
         }
     }
 
+    resetTas(){
+        if (this.ws != null)
+        {
+            this.ws.send('reset-tas')
+        }
+    }
+
 }
