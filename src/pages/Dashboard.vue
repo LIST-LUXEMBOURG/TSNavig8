@@ -1,6 +1,8 @@
 <script setup>
 import { defineProps } from 'vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
+import PlotComponent from '@/components/PlotComponent.vue';
+
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
 import TasComponent from '@/components/TasComponent.vue';
 import NoiseComponent from '@/components/NoiseComponent.vue';
@@ -9,7 +11,8 @@ defineProps({
         HeaderComponent,
         PlotLidarComponent,
         TasComponent,
-        NoiseComponent
+        NoiseComponent,
+        PlotComponent
     }
 })
 </script>
@@ -31,6 +34,9 @@ defineProps({
                 </div>
                 <div class="grid-item">
                     <NoiseComponent/>
+                </div>
+                <div class="grid-item">
+                    <PlotComponent/>
                 </div>
             </div>
         </div>

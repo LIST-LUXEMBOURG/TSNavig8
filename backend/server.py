@@ -199,7 +199,7 @@ def start_udp_listener(udp_host, udp_port, logger, server_notif):
             logger.info(f"UDP server listening on {udp_host}:{udp_port}")
             sequence_cloud=[]
             start_time = current_timestamp
-            threshold_time=0.13
+            threshold_time=0.1
             while True:
                 data, addr = s.recvfrom(HEADER_SIZE + (DATA_BLOCK_SIZE * NUMBER_OF_BLOCKS) + TAIL_SIZE)  # Adjust buffer size as needed
 

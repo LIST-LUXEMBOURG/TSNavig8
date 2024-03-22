@@ -25,6 +25,7 @@
             <tbody>
                 <tr v-for="(index, rowIndex) in slotData" :key="index">
                     <td>
+                        <!-- minimum cycle time = 12 500 ns -->
                         <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1" style="text-align: center; width: 150px;">
                     </td>
                     <td>Slot {{ rowIndex }}</td>
@@ -66,7 +67,6 @@ const $wsServices = inject('$wsservices');
 const slotCount = ref(1);
 const slotData = ref([{ duration: 0, q7: false, q6: false, q5: false, q4: false, q3: false, q2: false, q1: false, q0: false }]);
 
-
 function generateJSON() {
     let controlList = [];
     // Calculate the number of zeros in the numerator
@@ -102,6 +102,7 @@ function generateJSON() {
             gate_states_value: gateStatesValue,
             time_interval_value: slotData.value[rowIndex].duration
         });
+        
     }
 
     const json = {
@@ -125,7 +126,6 @@ function generateJSON() {
         }
     };
     console.log(JSON.stringify(json, 2, null))
-
     // Assuming $wsServices is an instance of WebSocket service
     $wsServices.sendTas(json);
 }

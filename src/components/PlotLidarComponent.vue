@@ -56,7 +56,7 @@ function sceneInitialisation() {
   // Create renderer
   const canvas = document.getElementById('lidar-container');
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize(window.innerWidth/2, 3*window.innerHeight/4)
+  renderer.setSize(3*window.innerWidth/5, 3*window.innerHeight/4)
   
   // Create controls
   controls = new OrbitControls(camera, renderer.domElement);
