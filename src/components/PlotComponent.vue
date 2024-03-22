@@ -21,58 +21,74 @@ export default {
 
         // Function to initialize the chart
         const initChart = () => {
-    const margin = { top: 50, right: 50, bottom: 30, left: 50 }; // Increased top margin to accommodate the title
-    const width = 600 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+            const margin = { top: 50, right: 50, bottom: 50, left: 50 }; // Increased bottom margin to accommodate x-axis label
+            const width = 600 - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
 
-    const svg = d3.select(chart.value)
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Translate the container group to accommodate top margin
+            const svg = d3.select(chart.value)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Translate the container group to accommodate top margin
 
-    // Append title
-    svg.append("text")
-        .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", -margin.top / 2) // Position above the plot area
-        .attr("text-anchor", "middle")
-        .attr("font-size", "18px")
-        .attr("font-weight", "bold")
-        .text("Real-Time Bandwidth Utilization");
+            // Append title
+            svg.append("text")
+                .attr("x", (width + margin.left + margin.right) / 2)
+                .attr("y", -margin.top / 2) // Position above the plot area
+                .attr("text-anchor", "middle")
+                .attr("font-size", "18px")
+                .attr("font-weight", "bold")
+                .text("Real-Time Bandwidth Utilization");
 
-    // Define x and y scales
-    xScale = d3.scaleLinear().range([0, width]);
-    yScale = d3.scaleLinear().range([height, 0]);
+            // Define x and y scales
+            xScale = d3.scaleLinear().range([0, width]);
+            yScale = d3.scaleLinear().range([height, 0]);
 
-    // Define the line generators
-    line1 = d3.line()
-        .x(d => xScale(d.time))
-        .y(d => yScale(d.last_200));
+            // Define the line generators
+            line1 = d3.line()
+                .x(d => xScale(d.time))
+                .y(d => yScale(d.last_200));
 
-    line2 = d3.line()
-        .x(d => xScale(d.time))
-        .y(d => yScale(d.last_all));
+            line2 = d3.line()
+                .x(d => xScale(d.time))
+                .y(d => yScale(d.last_all));
 
-    // Append x and y axes
-    svg.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", "translate(0," + height + ")");
+            // Append x and y axes
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(xScale))
+                .append("text")
+                .attr("x", width / 2)
+                .attr("y", margin.bottom - 10) // Adjusted position below X axis
+                .attr("fill", "#000")
+                .attr("text-anchor", "middle")
+                .text("Time, seconds"); // X axis label
 
-    svg.append("g")
-        .attr("class", "y-axis");
+            svg.append("g")
+                .attr("class", "y-axis")
+                .call(d3.axisLeft(yScale))
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -margin.left + 5)
+                .attr("x", -height / 2)
+                .attr("dy", "0.71em")
+                .attr("fill", "#000")
+                .attr("text-anchor", "middle")
+                .text("Mbit/second"); // Y axis label
 
-    // Append path elements for lines
-    svg.append("path")
-        .attr("class", "line1")
-        .attr("fill", "none")
-        .attr("stroke", "red")
-        .attr("stroke-width", 1.5);
+            // Append path elements for lines
+            svg.append("path")
+                .attr("class", "line1")
+                .attr("fill", "none")
+                .attr("stroke", "red")
+                .attr("stroke-width", 1.5);
 
-    svg.append("path")
-        .attr("class", "line2")
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("stroke-width", 1.5);
+            svg.append("path")
+                .attr("class", "line2")
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", 1.5);
 
             // Append legend
             const legend = svg.append("g")
@@ -102,6 +118,7 @@ export default {
                 .text("ALL");
         };
 
+
         // Function to update chart with new data
         const updateChart = () => {
             const svg = d3.select(chart.value).select("g");
@@ -128,17 +145,8 @@ export default {
         const onMessage = event => {
             const newData = JSON.parse(event.data);
             if (newData.type === "bandwidth_update") {
-                console.log("Throughput received from server: ", newData);
-
-                // Assuming 'newData' has properties 'last_200' and 'last_all'
                 newData.time = data.length + 1; // Generate time value based on index
                 data.push(newData);
-
-                // // Keep only the last 20 data points
-                // if (data.length > 20) {
-                //   data.shift();
-                // }
-
                 updateChart();
             }
         };
