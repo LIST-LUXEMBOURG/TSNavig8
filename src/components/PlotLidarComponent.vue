@@ -3,17 +3,19 @@
     <div class="row">
       <div class="col-md-2">
         <div class="d-flex flex-column">
-          <button class="btn btn-success m-2" id="startButton" @click.prevent="start">START LIDAR</button>
-          <button class="btn btn-danger m-2" id="stopButton" @click.prevent="stop">STOP LIDAR</button>
-          <button class="btn btn-success m-2" id="enableTraffic" @click.prevent="enableNoise">GENERATE TRAFFIC</button>
-          <button class="btn btn-danger m-2" id="disableTraffic" @click.prevent="disableNoise">STOP TRAFFIC</button>
-          <button class="btn btn-success m-2" id="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
-          <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button>
+          <button :class="buttonClass" @click="toggleLidar" id="lidarButton">{{ buttonText }}</button>
+          <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">{{ trafficButtonText }}</button>
+          <button :class="tasButtonClass" @click="toggleTas" id="tasButton">{{ tasButtonText }}</button>
+
+          <!-- <button class="btn btn-success m-2" id="enableTraffic" @click.prevent="enableNoise">GENERATE TRAFFIC</button> -->
+          <!-- <button class="btn btn-danger m-2" id="disableTraffic" @click.prevent="disableNoise">STOP TRAFFIC</button> -->
+          <!-- <button class="btn btn-success m-2" id="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
+          <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button> -->
           <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
           <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS</button>
         </div>
       </div>
-      
+
       <div class="col-md-8">
         <h3>Lidar Vizualization</h3>
         <canvas id="lidar-container"></canvas>
@@ -35,7 +37,7 @@ let camera = null
 let renderer = null
 let material = null
 let controls = null
-let lidarRunning = true
+let lidarRunning = true;
 let tasRunning = false
 let trafficRunning = false
 
@@ -62,7 +64,7 @@ function sceneInitialisation() {
   // Create renderer
   const canvas = document.getElementById('lidar-container');
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize( window.innerWidth / 2, 2 * window.innerHeight / 3)
+  renderer.setSize(window.innerWidth / 2, 2 * window.innerHeight / 3)
 
   // Create controls
   controls = new OrbitControls(camera, renderer.domElement);
@@ -151,58 +153,106 @@ function animate() {
   geometry.dispose();  // to save memory
   // axesHelper.dispose()
 }
-
-function stop() {
-  lidarRunning = false;
-  $wsServices.disconnect();
+function toggleLidar() {
+  if (lidarRunning) {
+    lidarRunning = false;
+    $wsServices.disconnect();
+  }
+  else {
+    lidarRunning = true;
+    $wsServices.connect();
+    displayPoints();
+  }
   updateButtonStates();
 }
 
-function start() {
-  lidarRunning = true;
-  $wsServices.connect();
-  displayPoints();
+function toggleTraffic() {
+  if (trafficRunning) {
+    trafficRunning = false;
+    $wsServices.disableNoise();
+  }
+  else {
+    trafficRunning = true;
+    $wsServices.enableNoise();
+  }
   updateButtonStates();
+
+}
+
+function toggleTas() {
+  if (tasRunning) {
+    tasRunning = false;
+    $wsServices.disableTas();
+  }
+  else {
+    tasRunning = true;
+  $wsServices.enableTas();
+  }
+  updateButtonStates();
+}
+
+function buttonText() {
+  return lidarRunning ? 'STOP LIDAR' : 'START LIDAR';
+}
+function buttonClass() {
+  return lidarRunning ? 'btn btn-danger m-2' : 'btn btn-success m-2';
 }
 
 function updateButtonStates() {
-  updateButtonState("startButton", lidarRunning);
-  updateButtonState("stopButton", !lidarRunning);
-  updateButtonState("enableTraffic", trafficRunning);
-  updateButtonState("disableTraffic", !trafficRunning);
-  updateButtonState("enableTas", tasRunning);
+
+  const button = document.getElementById('lidarButton');
+  if (button) {
+    button.innerText = buttonText();
+    button.className = buttonClass();
+  }
+  const trafficButton = document.getElementById('trafficButton');
+  if (trafficButton) {
+    trafficButton.innerText = trafficButtonText();
+    trafficButton.className = trafficButtonClass();
+  }
+  const tasButton = document.getElementById('tasButton');
+  if (tasButton) {
+    tasButton.innerText = tasButtonText();
+    tasButton.className = tasButtonClass();
+  }
+
+  // updateButtonState("enableTas", tasRunning);
   updateButtonState("negativeTest", tasRunning);
   updateButtonState("resetTas", tasRunning);
-  updateButtonState("disableTas", !tasRunning);
+  // updateButtonState("disableTas", !tasRunning);
+}
+
+
+function trafficButtonText() {
+  return trafficRunning ? 'STOP TRAFFIC' : 'GENERATE TRAFFIC';
+}
+function trafficButtonClass() {
+  return trafficRunning ? 'btn btn-danger m-2' : 'btn btn-success m-2';
+}
+
+function tasButtonText() {
+  return tasRunning ? 'DISABLE TAS' : 'ENABLE TAS';
+}
+function tasButtonClass() {
+  return tasRunning ? 'btn btn-danger m-2' : 'btn btn-success m-2';
 }
 
 function updateButtonState(buttonId, running) {
   document.getElementById(buttonId).disabled = running;
 }
+// function enableTas() {
+//   tasRunning = true;
+//   $wsServices.enableTas();
+//   updateButtonStates();
+// }
 
-function enableTas() {
-  tasRunning = true;
-  $wsServices.enableTas();
-  updateButtonStates();
-}
+// function disableTas() {
+//   tasRunning = false;
+//   $wsServices.disableTas();
+//   updateButtonStates();
+// }
 
-function disableTas() {
-  tasRunning = false;
-  $wsServices.disableTas();
-  updateButtonStates();
-}
 
-function enableNoise() {
-  trafficRunning = true;
-  $wsServices.enableNoise();
-  updateButtonStates();
-}
-
-function disableNoise() {
-  trafficRunning = false;
-  $wsServices.disableNoise();
-  updateButtonStates();
-}
 
 function negativeTest() {
   tasRunning = true;
