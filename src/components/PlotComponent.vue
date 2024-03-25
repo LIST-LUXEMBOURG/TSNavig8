@@ -1,11 +1,19 @@
 <template>
     <div class="container">
-      <div class="chart-container">
-        <svg ref="chart"></svg>
-        <button class="btn btn-primary" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
-      </div>
+        <div class="chart-container">
+            <div class="title-row">
+                <h3 class="title">Real-Time Bandwidth Utilization</h3>
+                <button class="btn btn-primary" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+            <div class="svg-row">
+                <div class="chart-content">
+                    <svg ref="chart"></svg>
+                </div>
+            </div>
+        </div>
     </div>
-  </template>
+</template>
+
 
 <script>
 import { ref, onMounted, onUnmounted, inject } from 'vue'; // Import necessary functions from Vue
@@ -23,26 +31,26 @@ export default {
 
         // Function to initialize the chart
         const initChart = () => {
-            const margin = { top: 50, right: 50, bottom: 50, left: 50 }; // Increased bottom margin to accommodate x-axis label
+            const margin = { top: 50, right: 20, bottom: 50, left: 80 }; // Increased bottom margin to accommodate x-axis label
             const fullWidth = window.innerWidth * (1 / 3); // Width as 2/5 of window size
-            const fullHeight = window.innerHeight * (4 / 5); // Height as 1/4 of window size
+            const fullHeight = window.innerHeight * (2/ 3); // Height as 1/4 of window size
 
             const width = fullWidth - margin.left - margin.right;
-            const height = fullHeight - margin.top - margin.bottom;
+            const height = fullHeight - margin.top ;
 
             const svg = d3.select(chart.value)
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Translate the container group to accommodate top margin
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
 
             // Append title
-            svg.append("text")
-                .attr("x", (width + margin.left + margin.right) / 2)
-                .attr("y", -margin.top / 2) // Position above the plot area
-                .attr("text-anchor", "middle")
-                .style("font", "bold 22px arial")
-                .text("Real-Time Bandwidth Utilization");
+            // svg.append("text")
+            //     .attr("x", (width + margin.left + margin.right) / 2)
+            //     .attr("y", -margin.top / 2) // Position above the plot area
+            //     .attr("text-anchor", "middle")
+            //     .style("font", "bold 22px arial")
+            //     .text("Real-Time Bandwidth Utilization");
 
             // Define x and y scales
             xScale = d3.scaleLinear().range([0, width]);
@@ -125,23 +133,23 @@ export default {
 
             // Add background rectangle for legend caption
             legend.append("rect")
-                .attr("x", -5)
+                .attr("x", -35)
                 .attr("y", -20)
-                .attr("width", 80)
+                .attr("width", 70)
                 .attr("height", 50)
                 .attr("fill", "white")
                 .attr("stroke", "black");
 
             // Add text elements for legend
             legend.append("text")
-                .attr("x", 0)
+                .attr("x", -30)
                 .attr("y", 0)
                 .attr("fill", "red")
                 .text("LiDAR")
                 .style("font", "20px arial");
 
             legend.append("text")
-                .attr("x", 0)
+                .attr("x", -30)
                 .attr("y", 20)
                 .attr("fill", "blue")
                 .text("ALL")
@@ -184,7 +192,6 @@ export default {
                 newData.time = data.length; // Generate time value based on index
                 data.push(newData);
                 updateChart();
-                console.log(data)
             }
         };
         const refreshPlot = () => {
@@ -219,16 +226,23 @@ export default {
 
 <style>
 .container {
-  display: flex;
-  justify-content: center; /* Center the content horizontally */
+    display: flex;
+    justify-content: center;
 }
 
 .chart-container {
-  display: flex;
-  align-items: center; /* Align items vertically */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-svg {
-  margin-right: -10px; /* Adjust the spacing between the SVG chart and the button */
+.title-row {
+    display: flex;
+    align-items: center;
 }
+
+.title {
+    margin-right: 10px;
+}
+
 </style>

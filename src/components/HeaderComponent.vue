@@ -1,7 +1,10 @@
 <template>
     <div>
         <header class="d-flex justify-content-between align-items-center">
-            <h2>{{ title }}</h2>
+            <div>
+            <h3>{{ title }}</h3>
+            <p>Authors: Darinela Andronovici, Damien Nicolas, Ion Turcanu, and Cristoph Sommer</p>
+        </div>
             <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 aria-controls="offcanvasRight"> <i class="bi bi-gear-wide"></i></button>
 
@@ -18,6 +21,7 @@
 
                 </div>
             </div>
+            
         </header>
     </div>
 </template>

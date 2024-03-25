@@ -10,11 +10,12 @@
           <button class="btn btn-success m-2" id="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
           <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button>
           <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
-          <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS CONFIGURATION</button>
+          <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS</button>
         </div>
       </div>
       
       <div class="col-md-8">
+        <h3>Lidar Vizualization</h3>
         <canvas id="lidar-container"></canvas>
       </div>
     </div>
@@ -61,7 +62,7 @@ function sceneInitialisation() {
   // Create renderer
   const canvas = document.getElementById('lidar-container');
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize( window.innerWidth / 2, 3 * window.innerHeight / 4)
+  renderer.setSize( window.innerWidth / 2, 2 * window.innerHeight / 3)
 
   // Create controls
   controls = new OrbitControls(camera, renderer.domElement);
@@ -205,6 +206,7 @@ function disableNoise() {
 
 function negativeTest() {
   tasRunning = true;
+  trafficRunning = true;
   $wsServices.negativeTest();
   updateButtonStates();
 }

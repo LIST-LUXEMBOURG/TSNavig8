@@ -2,7 +2,7 @@
 <template>
     <footer class="footer">
       <div class="container">
-        <span class="text-muted">This is a simple footer.</span>
+        <span >This is a simple footer.</span>
       </div>
     </footer>
   </template>
@@ -12,6 +12,7 @@
     background-color: #707070;
     padding: 30px 0;
     text-align: center;
+    color: white;
   }
   </style>
   
