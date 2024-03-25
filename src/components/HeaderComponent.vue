@@ -1,7 +1,9 @@
 <template>
-    <header>
-        <h2>{{ title }}</h2>
-    </header>
+    <div>
+        <header class="d-flex justify-content-between align-items-center">
+            <h2>{{ title }}</h2>
+        </header>
+    </div>
 </template>
 
 <script>
@@ -14,6 +16,7 @@ export default {
     }
 };
 </script>
+
 
 <style scoped>
 header {

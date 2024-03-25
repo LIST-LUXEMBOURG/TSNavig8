@@ -11,7 +11,6 @@ export class WSTServices {
             this.ws = new WebSocket(this.options.url)
             console.log("---New web socket instance is created")
             console.log("listening on url: " + this.options.url)
-            console.log("using store: " + JSON.stringify(this.store))
         }
         else {
             console.log("Reusing existing web socket instance")
@@ -47,14 +46,6 @@ export class WSTServices {
         this.ws.onerror = (error) => {
             console.error(error)
         }
-        
-
-        // this.ws.onmessage = (event) => {
-        //     const data_received = JSON.parse(event.data)
-        //     if (data_received.type == "bandwidth_update") {
-        //         console.log("Throughput received from server: ", data_received)         
-        // }
-    // }
     }
 
     disconnect() {

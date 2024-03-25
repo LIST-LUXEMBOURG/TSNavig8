@@ -145,9 +145,10 @@ export default {
         const onMessage = event => {
             const newData = JSON.parse(event.data);
             if (newData.type === "bandwidth_update") {
-                newData.time = data.length + 1; // Generate time value based on index
+                newData.time = data.length; // Generate time value based on index
                 data.push(newData);
                 updateChart();
+                // console.log(data)
             }
         };
         const refreshPlot = () => {
@@ -160,13 +161,13 @@ export default {
             // Reconnect WebSocket and initialize chart
             wsService.connect();
             wsService.ws.onmessage = onMessage;
-            initChart();
+
+            updateChart();
         };
         // Connect to WebSocket on component mount
         onMounted(() => {
             wsService.connect();
             wsService.ws.onmessage = onMessage;
-
             initChart();
         });
 
