@@ -1,9 +1,11 @@
 <template>
-    <div>
+    <div class="container">
+      <div class="chart-container">
         <svg ref="chart"></svg>
-        <button class="btn btn-primary" @click.prevent="refreshPlot">Refresh Plot</button>
+        <button class="btn btn-primary" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
+      </div>
     </div>
-</template>
+  </template>
 
 <script>
 import { ref, onMounted, onUnmounted, inject } from 'vue'; // Import necessary functions from Vue
@@ -17,13 +19,13 @@ export default {
 
         let xScale, yScale; // Scales for x and y axes
         let line1, line2; // Line generators for data visualization
-        let data = []; 
+        let data = [];
 
         // Function to initialize the chart
         const initChart = () => {
             const margin = { top: 50, right: 50, bottom: 50, left: 50 }; // Increased bottom margin to accommodate x-axis label
             const fullWidth = window.innerWidth * (1 / 3); // Width as 2/5 of window size
-    const fullHeight = window.innerHeight * (3 / 4); // Height as 1/4 of window size
+            const fullHeight = window.innerHeight * (4 / 5); // Height as 1/4 of window size
 
             const width = fullWidth - margin.left - margin.right;
             const height = fullHeight - margin.top - margin.bottom;
@@ -39,8 +41,7 @@ export default {
                 .attr("x", (width + margin.left + margin.right) / 2)
                 .attr("y", -margin.top / 2) // Position above the plot area
                 .attr("text-anchor", "middle")
-                .attr("font-size", "18px")
-                .attr("font-weight", "bold")
+                .style("font", "bold 22px arial")
                 .text("Real-Time Bandwidth Utilization");
 
             // Define x and y scales
@@ -66,7 +67,8 @@ export default {
                 .attr("y", margin.bottom - 10) // Adjusted position below X axis
                 .attr("fill", "#000")
                 .attr("text-anchor", "middle")
-                .text("Time, seconds"); // X axis label
+                .text("Time, seconds") // X axis label
+                .style("font", "18px arial");
 
             svg.append("g")
                 .attr("class", "y-axis")
@@ -78,7 +80,30 @@ export default {
                 .attr("dy", "0.71em")
                 .attr("fill", "#000")
                 .attr("text-anchor", "middle")
-                .text("Mbit/second"); // Y axis label
+                .text("Mbit/second") // Y axis label
+                .style("font", "18px arial");
+            
+            // Append gridlines for x-axis
+            // svg.append("g")
+            //     .attr("class", "grid")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .call(d3.axisBottom(xScale).tickSize(-height).tickFormat(""))
+            //     .selectAll("line")
+            //     .attr("stroke", "lightgrey");
+
+            // Append gridlines for y-axis
+            svg.append("g")
+                .attr("class", "grid")
+                .call(d3.axisLeft(yScale).tickSize(-width).tickFormat("")) // Adjust the number of ticks displayed
+                .selectAll(".tick")
+                .each(function (d, i) {
+                    if (i === 0) {
+                        d3.select(this).remove(); // Remove the first tick (which overlaps with the x-axis)
+                    }
+                })
+                .selectAll("line")
+                .attr("stroke", "lightgrey");
+
 
             // Append path elements for lines
             svg.append("path")
@@ -101,9 +126,9 @@ export default {
             // Add background rectangle for legend caption
             legend.append("rect")
                 .attr("x", -5)
-                .attr("y", -15)
+                .attr("y", -20)
                 .attr("width", 80)
-                .attr("height", 40)
+                .attr("height", 50)
                 .attr("fill", "white")
                 .attr("stroke", "black");
 
@@ -112,13 +137,15 @@ export default {
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("fill", "red")
-                .text("LiDAR");
+                .text("LiDAR")
+                .style("font", "20px arial");
 
             legend.append("text")
                 .attr("x", 0)
                 .attr("y", 20)
                 .attr("fill", "blue")
-                .text("ALL");
+                .text("ALL")
+                .style("font", "20px arial");
         };
 
 
@@ -132,10 +159,14 @@ export default {
 
             // Select and update x and y axes
             svg.select(".x-axis")
-                .call(d3.axisBottom(xScale));
+                .call(d3.axisBottom(xScale))
+                .selectAll(".tick text")
+                .style("font-size", "16px");
 
             svg.select(".y-axis")
-                .call(d3.axisLeft(yScale));
+                .call(d3.axisLeft(yScale))
+                .selectAll(".tick text")
+                .style("font-size", "16px");
 
             // Update line paths
             svg.select(".line1")
@@ -143,6 +174,8 @@ export default {
 
             svg.select(".line2")
                 .attr("d", line2(data));
+
+
         };
 
         const onMessage = event => {
@@ -151,7 +184,7 @@ export default {
                 newData.time = data.length; // Generate time value based on index
                 data.push(newData);
                 updateChart();
-                // console.log(data)
+                console.log(data)
             }
         };
         const refreshPlot = () => {
@@ -184,6 +217,18 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Add your custom styles here */
+<style>
+.container {
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+}
+
+.chart-container {
+  display: flex;
+  align-items: center; /* Align items vertically */
+}
+
+svg {
+  margin-right: -10px; /* Adjust the spacing between the SVG chart and the button */
+}
 </style>

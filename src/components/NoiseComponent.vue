@@ -12,13 +12,13 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="number" min="60" max="1518" v-model="frameSize" style="width: 120px;">
+                        <input type="number" min="60" max="1518" v-model="frameSize" style="width: 120px;" class="form-control">
                     </td>
                     <td>
-                        <input type="number" min="0" max="7" v-model="priorityCodePoint" style="width: 120px;">
+                        <input type="number" min="0" max="7" v-model="priorityCodePoint" style="width: 120px;" class="form-control">
                     </td>
                     <td>
-                        <input type="number" min="1" max="100" v-model="transmissionRate" style="width: 120px;">
+                        <input type="number" min="1" max="100" v-model="transmissionRate" style="width: 120px;" class="form-control">
                     </td>
 
                 </tr>

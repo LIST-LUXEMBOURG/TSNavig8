@@ -1,9 +1,9 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 
 export const usePointsStore = defineStore('pointsStore', {
     state: () => ({
-            lidarData: [],
-        })
+        lidarData: [],
+    })
     ,
     getters: {
         getLidarData: state => state.lidarData,

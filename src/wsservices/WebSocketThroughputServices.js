@@ -41,7 +41,7 @@ export class WSTServices {
                 }
             }
         }
-       
+
 
         this.ws.onerror = (error) => {
             console.error(error)

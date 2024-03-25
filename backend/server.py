@@ -250,7 +250,11 @@ def message_received(client, server, message):
     #         print(f"Error executing command: {e}")
     elif message == "negative-tas":
         try:           
-            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test1-tas.json', '-n', '1'], check=True)
+            # subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test1-tas.json', '-n', '1'], check=True)
+
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/negative-tas.json', '-n', '1'], check=True)
+            subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'start_traf_gen.py', '--port', '0'], check=True)
+
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
     elif message == "disable-tas":

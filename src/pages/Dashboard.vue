@@ -3,35 +3,39 @@ import { defineProps } from 'vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import PlotComponent from '@/components/PlotComponent.vue';
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
 
 defineProps({
-    components:{
+    components: {
         HeaderComponent,
         PlotLidarComponent,
-        PlotComponent
+        PlotComponent,
+        FooterComponent
     }
 })
 </script>
 
 <template>
     <div>
-        <HeaderComponent title="Interactive Off-the-Shelf TSN Testbed"/>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="grid-item">
-                  <div class="d-flex flex-column">
-                    <PlotLidarComponent/>
-                  </div>
-                </div>
+      <HeaderComponent title="Interactive Off-the-Shelf In-Car TSN Testbed" />
+      <div class="row">
+        <div class="col-md-7">
+          <div class="grid-item">
+            <div class="d-flex flex-column">
+              <PlotLidarComponent />
             </div>
-            <div class="col-md-4">
-                <div class="grid-item">
-                    <PlotComponent/>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="col-md-5">
+          <div class="grid-item">
+            <PlotComponent />
+          </div>
+        </div>
+      </div>
+      <FooterComponent />
     </div>
-</template>
+  </template>
+  
 
 
 <style scoped>
@@ -41,5 +45,3 @@ defineProps({
     margin-bottom: 20px;
 }
 </style>
-
-

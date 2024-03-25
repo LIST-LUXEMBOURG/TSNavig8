@@ -5,12 +5,8 @@ import Dashboard from '@/pages/Dashboard.vue';
 
 <template>
   <div class="container-fluid">
-        <Dashboard />
-<!--        <div>-->
-<!--    </div>-->
+    <Dashboard />
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,29 +1,34 @@
 <template>
   <div class="container-fluid">
-    <canvas id="lidar-container"></canvas>
-    <div class="container">
-      <div class="d-flex">
-        <button class="btn btn-success m-2" id="startButton" @click.prevent="start" >START LIDAR</button>
-        <button class="btn btn-danger m-2" id="stopButton" @click.prevent="stop" >STOP LIDAR</button>
-        <button class="btn btn-success m-2" id="enableTraffic" @click.prevent="enableNoise">START NOISE</button>
-        <button class="btn btn-danger m-2" id="disableTraffic" @click.prevent="disableNoise">STOP NOISE</button>
-        <!-- here should be new line -->
-        <button class="btn btn-success m-2" id ="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
-        <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button>
-        <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
-        <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">RESET TAS</button>
+    <div class="row">
+      <div class="col-md-2">
+        <div class="d-flex flex-column">
+          <button class="btn btn-success m-2" id="startButton" @click.prevent="start">START LIDAR</button>
+          <button class="btn btn-danger m-2" id="stopButton" @click.prevent="stop">STOP LIDAR</button>
+          <button class="btn btn-success m-2" id="enableTraffic" @click.prevent="enableNoise">GENERATE TRAFFIC</button>
+          <button class="btn btn-danger m-2" id="disableTraffic" @click.prevent="disableNoise">STOP TRAFFIC</button>
+          <button class="btn btn-success m-2" id="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
+          <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button>
+          <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
+          <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS CONFIGURATION</button>
+        </div>
+      </div>
+      
+      <div class="col-md-8">
+        <canvas id="lidar-container"></canvas>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup>
 import * as THREE from 'three';
 import { onMounted, ref, inject, computed, onDeactivated } from "vue";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 const $wsServices = inject('$wsservices')
 let pointsData = computed(() => { return $wsServices.getStore().getLidarData })
-let cameraZ=ref(500)
+let cameraZ = ref(500)
 let scene = null
 let camera = null
 let renderer = null
@@ -51,52 +56,51 @@ function sceneInitialisation() {
   scene = new THREE.Scene();
   // Create camera
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1300);
-  camera.position.set(0,0, cameraZ.value)
+  camera.position.set(0, 0, cameraZ.value)
   camera.lookAt(scene.position)
   // Create renderer
   const canvas = document.getElementById('lidar-container');
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
-  renderer.setSize(3*window.innerWidth/5, 3*window.innerHeight/4)
-  
+  renderer.setSize( window.innerWidth / 2, 3 * window.innerHeight / 4)
+
   // Create controls
   controls = new OrbitControls(camera, renderer.domElement);
   controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
-  controls.mouseButtons.RIGHT = THREE.MOUSE.PAN;  
+  controls.mouseButtons.RIGHT = THREE.MOUSE.PAN;
   controls.maxDistance = 1500;
   // controls.minDistance = 0;
   // controls.rotateSpeed = 0.5;
   // controls.panSpeed = 0.5;
   // controls.screenSpacePanning = false;
-  window.addEventListener('keydown', function(e) {
-    if(e.code === 'KeyR')
+  window.addEventListener('keydown', function (e) {
+    if (e.code === 'KeyR')
       controls.reset();
-    
+
   })
 
   const sprite = new THREE.TextureLoader().load('disc.png');
   material = new THREE.PointsMaterial({
-    size:2, // Adjust the size of the sprite
+    size: 2, // Adjust the size of the sprite
     map: sprite,
     vertexColors: true // Enable vertex colors
   });
 }
 function displayPoints() {
   const positions = new Float32Array(pointsData.value.length * 3); // Each point has x, y, z coordinates
-  const colors = new Float32Array(pointsData.value.length* 3); // Each point has r, g, b colors
+  const colors = new Float32Array(pointsData.value.length * 3); // Each point has r, g, b colors
   const geometry = new THREE.BufferGeometry();
   for (let i = 0; i < pointsData.value.length; i++) {
-    if ($wsServices.getStore().getLidarData[i] !== undefined)
-    {
+    if ($wsServices.getStore().getLidarData[i] !== undefined) {
       // console.log('Display points')
       positions[i * 3] = $wsServices.getStore().getLidarData[i][0];
       positions[i * 3 + 1] = $wsServices.getStore().getLidarData[i][1];
       positions[i * 3 + 2] = $wsServices.getStore().getLidarData[i][2];
 
       let dst = $wsServices.getStore().getLidarData[i][4]; // distance in cm
-      let clr = dst/255;
-        colors[i * 3] = 1-clr;
-        colors[i * 3 + 1] = clr;
-        colors[i * 3 + 2] = clr;
+      let clr = dst / 255;
+      colors[i * 3] = 1 - clr;
+      colors[i * 3 + 1] = clr;
+      colors[i * 3 + 2] = clr;
     }
   }
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -111,20 +115,19 @@ function displayPoints() {
 }
 function animate() {
   scene.remove.apply(scene, scene.children)
-  const positions = new Float32Array(pointsData.value.length*3);
-  const colors = new Float32Array(pointsData.value.length*3);
+  const positions = new Float32Array(pointsData.value.length * 3);
+  const colors = new Float32Array(pointsData.value.length * 3);
   for (let i = 0; i < pointsData.value.length; i++) {
-    if ($wsServices.getStore().getLidarData[i] !== undefined)
-    {
+    if ($wsServices.getStore().getLidarData[i] !== undefined) {
       positions[i * 3] = $wsServices.getStore().getLidarData[i][0];
       positions[i * 3 + 1] = $wsServices.getStore().getLidarData[i][1];
       positions[i * 3 + 2] = $wsServices.getStore().getLidarData[i][2];
 
       let dst = $wsServices.getStore().getLidarData[i][4]; // distance in cm
-      let clr = dst/255;
-        colors[i * 3] = 1-clr;
-        colors[i * 3 + 1] = clr;
-        colors[i * 3 + 2] = clr;
+      let clr = dst / 255;
+      colors[i * 3] = 1 - clr;
+      colors[i * 3 + 1] = clr;
+      colors[i * 3 + 2] = clr;
     }
   }
   const geometry = new THREE.BufferGeometry();
@@ -213,5 +216,4 @@ function resetTas() {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

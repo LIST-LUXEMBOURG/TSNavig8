@@ -44,20 +44,20 @@ export class WSServices {
                 }
             }
         }
-       
+
 
         this.ws.onerror = (error) => {
             console.error(error)
         }
-        
+
 
         this.ws.onmessage = (event) => {
             const points_received = JSON.parse(event.data)
             // this.ws.send("test")
             if (points_received.point_cloud) {
                 let data_temp = JSON.parse(points_received.point_cloud)
-                this.getStore().setLidarData(data_temp)   
-            }           
+                this.getStore().setLidarData(data_temp)
+            }
         }
     }
 
@@ -70,59 +70,51 @@ export class WSServices {
         }
     }
 
-    getStore(){
+    getStore() {
         return this.store;
     }
 
-    enableTas(){
-        if (this.ws != null)
-        {
+    enableTas() {
+        if (this.ws != null) {
             this.ws.send('enable-tas')
         }
     }
-    disableTas(){
-        if (this.ws != null)
-        {
+    disableTas() {
+        if (this.ws != null) {
             this.ws.send('disable-tas')
         }
     }
-    enableNoise(){
-        if (this.ws != null)
-        {
+    enableNoise() {
+        if (this.ws != null) {
             this.ws.send('enable-noise')
         }
     }
-    disableNoise(){
-        if (this.ws != null)
-        {
+    disableNoise() {
+        if (this.ws != null) {
             this.ws.send('disable-noise')
         }
     }
 
-    sendTas(jsonFile){
-        if (this.ws != null)
-        {
+    sendTas(jsonFile) {
+        if (this.ws != null) {
             this.ws.send(JSON.stringify(jsonFile))
         }
     }
 
-    configureNoise(text){
-        if (this.ws != null)
-        {
+    configureNoise(text) {
+        if (this.ws != null) {
             this.ws.send(text)
         }
     }
 
-    negativeTest(){
-        if (this.ws != null)
-        {
+    negativeTest() {
+        if (this.ws != null) {
             this.ws.send('negative-tas')
         }
     }
 
-    resetTas(){
-        if (this.ws != null)
-        {
+    resetTas() {
+        if (this.ws != null) {
             this.ws.send('reset-tas')
         }
     }

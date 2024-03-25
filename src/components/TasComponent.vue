@@ -1,57 +1,58 @@
 <template>
-    <div style="margin-top: 10%;">
+    <div style="margin-top: 10%;" >
         <h5>Time-Aware Shaper Configuration</h5>
         <table cellpadding="" cellspacing="30px" style="width: 100%;">
             <tr>
                 <td><b>Number of Slots</b> </td>
-                <td><input type="number" v-model="slotCount" min="1" step="1"  style="width: 120px;"></td>
+                <td><input type="number" v-model="slotCount" min="1" step="1" style="width: 120px;"  class="form-control"></td>
             </tr>
         </table>
-        <table cellpadding="" cellspacing="40px" style="width: 100%; margin-top: 2%;"> 
+        <table cellpadding="" cellspacing="40px" style="width: 100%; margin-top: 2%;">
             <thead>
-                <tr >
+                <tr>
                     <th>Slot duration (ns)</th>
                     <th>Slot number</th>
-                    <th  style="text-align: center;">Q7</th>
-                    <th  style="text-align: center;">Q6</th>
-                    <th  style="text-align: center;">Q5</th>
-                    <th  style="text-align: center;">Q4</th>
-                    <th  style="text-align: center;">Q3</th>
-                    <th  style="text-align: center;">Q2</th>
-                    <th  style="text-align: center;">Q1</th>
-                    <th  style="text-align: center;">Q0</th>
+                    <th style="text-align: center;">Q7</th>
+                    <th style="text-align: center;">Q6</th>
+                    <th style="text-align: center;">Q5</th>
+                    <th style="text-align: center;">Q4</th>
+                    <th style="text-align: center;">Q3</th>
+                    <th style="text-align: center;">Q2</th>
+                    <th style="text-align: center;">Q1</th>
+                    <th style="text-align: center;">Q0</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(index, rowIndex) in slotData" :key="index">
                     <td>
                         <!-- minimum cycle time = 12 500 ns -->
-                        <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1" style="text-align: center; width: 120px;">
+                        <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1"
+                            style="text-align: center; width: 120px;" class="form-control">
                     </td>
                     <td>Slot {{ rowIndex }}</td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q7">
+                        <input type="checkbox" v-model="slotData[rowIndex].q7" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q6">
+                        <input type="checkbox" v-model="slotData[rowIndex].q6" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q5">
+                        <input type="checkbox" v-model="slotData[rowIndex].q5" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q4">
+                        <input type="checkbox" v-model="slotData[rowIndex].q4" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q3">
+                        <input type="checkbox" v-model="slotData[rowIndex].q3" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q2">
+                        <input type="checkbox" v-model="slotData[rowIndex].q2" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q1">
+                        <input type="checkbox" v-model="slotData[rowIndex].q1" class="form-check-input">
                     </td>
                     <td style="text-align: center;">
-                        <input type="checkbox" v-model="slotData[rowIndex].q0">
+                        <input type="checkbox" v-model="slotData[rowIndex].q0" class="form-check-input">
                     </td>
                 </tr>
             </tbody>
@@ -80,11 +81,11 @@ function generateJSON() {
     }
 
     // Adjust the denominator accordingly
-    let denominator = Math.pow(10, 9-numZeros);
-    if (slotCount.value < 1 ) {
-            alert("Number of slots must be greater than 0.");
-            return;
-        }
+    let denominator = Math.pow(10, 9 - numZeros);
+    if (slotCount.value < 1) {
+        alert("Number of slots must be greater than 0.");
+        return;
+    }
     for (let rowIndex = 0; rowIndex < slotData.value.length; rowIndex++) {
         let gateStatesValue = 0;
         for (let i = 0; i < 8; i++) {
@@ -92,7 +93,7 @@ function generateJSON() {
                 gateStatesValue |= 1 << i;
             }
         }
-        if ( slotData.value[rowIndex].duration < 1000 ) {
+        if (slotData.value[rowIndex].duration < 1000) {
             alert("Slot duration must be greater than 1000 ns.");
             return;
         }
@@ -103,7 +104,7 @@ function generateJSON() {
             gate_states_value: gateStatesValue,
             time_interval_value: slotData.value[rowIndex].duration
         });
-        
+
     }
 
     const json = {
@@ -127,7 +128,7 @@ function generateJSON() {
         }
     };
     // console.log(JSON.stringify(json, 2, null))
-     // Display success message
+    // Display success message
     const successMessage = document.getElementById('successMessage');
     successMessage.style.display = 'block';
     slotCount.value = 1;
@@ -145,4 +146,3 @@ watch(slotCount, (newValue) => {
     slotData.value = Array.from({ length: newValue }, () => ({ duration: 0, q7: false, q6: false, q5: false, q4: false, q3: false, q2: false, q1: false, q0: false }));
 });
 </script>
-
