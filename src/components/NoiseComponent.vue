@@ -1,7 +1,7 @@
 <template>
     <div style="margin-top: 2%;">
-        <h3>Traffic Generator Configuration</h3>
-        <table cellpadding="" cellspacing="50px" style="width: 100%;">
+        <h5>Traffic Generator Configuration</h5>
+        <table cellpadding="" cellspacing="40px" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Frame Size (Bytes)</th>
@@ -12,20 +12,20 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="number" min="60" max="1518" v-model="frameSize" style="width: 150px;">
+                        <input type="number" min="60" max="1518" v-model="frameSize" style="width: 120px;">
                     </td>
                     <td>
-                        <input type="number" min="0" max="7" v-model="priorityCodePoint" style="width: 150px;">
+                        <input type="number" min="0" max="7" v-model="priorityCodePoint" style="width: 120px;">
                     </td>
                     <td>
-                        <input type="number" min="1" max="100" v-model="transmissionRate" style="width: 150px;">
+                        <input type="number" min="1" max="100" v-model="transmissionRate" style="width: 120px;">
                     </td>
 
                 </tr>
             </tbody>
         </table>
         <div id="succMessage" style="display: none; color: green;">Configuration Successful</div>
-        <button @click="configure" style="margin-top: 2%;">Apply</button>
+        <button class="btn btn-success m-2" @click="configure" style="margin-top: 2%;">Apply</button>
     </div>
 </template>
 

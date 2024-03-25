@@ -1,7 +1,7 @@
 <template>
     <div>
         <svg ref="chart"></svg>
-        <button @click.prevent="refreshPlot">Refresh Plot</button>
+        <button class="btn btn-primary" @click.prevent="refreshPlot">Refresh Plot</button>
     </div>
 </template>
 
@@ -17,13 +17,16 @@ export default {
 
         let xScale, yScale; // Scales for x and y axes
         let line1, line2; // Line generators for data visualization
-        let data = []; // Data array for storing received data points
+        let data = []; 
 
         // Function to initialize the chart
         const initChart = () => {
             const margin = { top: 50, right: 50, bottom: 50, left: 50 }; // Increased bottom margin to accommodate x-axis label
-            const width = 600 - margin.left - margin.right;
-            const height = 400 - margin.top - margin.bottom;
+            const fullWidth = window.innerWidth * (1 / 3); // Width as 2/5 of window size
+    const fullHeight = window.innerHeight * (3 / 4); // Height as 1/4 of window size
+
+            const width = fullWidth - margin.left - margin.right;
+            const height = fullHeight - margin.top - margin.bottom;
 
             const svg = d3.select(chart.value)
                 .attr("width", width + margin.left + margin.right)

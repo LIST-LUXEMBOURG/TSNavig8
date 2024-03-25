@@ -5,7 +5,8 @@ import { WSServices} from "@/wsservices/WebSocketServices";
 import { WSTServices} from "@/wsservices/WebSocketThroughputServices";
 import {usePointsStore} from "@/store/pointsStore";
 import 'bootstrap/dist/css/bootstrap.css'
-
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 const pinia = createPinia()
 const app = createApp(App)
 app.use(pinia)

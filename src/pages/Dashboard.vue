@@ -2,16 +2,12 @@
 import { defineProps } from 'vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import PlotComponent from '@/components/PlotComponent.vue';
-
 import PlotLidarComponent from '@/components/PlotLidarComponent.vue';
-import TasComponent from '@/components/TasComponent.vue';
-import NoiseComponent from '@/components/NoiseComponent.vue';
+
 defineProps({
     components:{
         HeaderComponent,
         PlotLidarComponent,
-        TasComponent,
-        NoiseComponent,
         PlotComponent
     }
 })
@@ -29,12 +25,6 @@ defineProps({
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="grid-item">
-                    <TasComponent/>
-                </div>
-                <div class="grid-item">
-                    <NoiseComponent/>
-                </div>
                 <div class="grid-item">
                     <PlotComponent/>
                 </div>

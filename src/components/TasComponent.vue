@@ -1,13 +1,13 @@
 <template>
-    <div style="margin-top: 2%;">
-        <h3>Time-Aware Shaper Configuration</h3>
+    <div style="margin-top: 10%;">
+        <h5>Time-Aware Shaper Configuration</h5>
         <table cellpadding="" cellspacing="30px" style="width: 100%;">
             <tr>
                 <td><b>Number of Slots</b> </td>
-                <td><input type="number" v-model="slotCount" min="1" step="1"  style="width: 150px;"></td>
+                <td><input type="number" v-model="slotCount" min="1" step="1"  style="width: 120px;"></td>
             </tr>
         </table>
-        <table cellpadding="" cellspacing="50px" style="width: 100%; margin-top: 2%;"> 
+        <table cellpadding="" cellspacing="40px" style="width: 100%; margin-top: 2%;"> 
             <thead>
                 <tr >
                     <th>Slot duration (ns)</th>
@@ -26,7 +26,7 @@
                 <tr v-for="(index, rowIndex) in slotData" :key="index">
                     <td>
                         <!-- minimum cycle time = 12 500 ns -->
-                        <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1" style="text-align: center; width: 150px;">
+                        <input type="number" v-model="slotData[rowIndex].duration" min="1000" step="1" style="text-align: center; width: 120px;">
                     </td>
                     <td>Slot {{ rowIndex }}</td>
                     <td style="text-align: center;">
@@ -57,7 +57,7 @@
             </tbody>
         </table>
         <div id="successMessage" style="display: none; color: green;">Configuration Successful</div>
-        <button @click="generateJSON" style="margin-top: 2%;">Apply</button>
+        <button class="btn btn-success m-2" @click="generateJSON" style="margin-top: 2%;">Apply</button>
     </div>
 </template>
 
