@@ -1,6 +1,6 @@
 <template>
     <div style="margin-top: 2%;">
-        <h3>Configure the Time-Aware Shaper</h3>
+        <h3>Time-Aware Shaper Configuration</h3>
         <table cellpadding="" cellspacing="30px" style="width: 100%;">
             <tr>
                 <td><b>Number of Slots</b> </td>
@@ -56,7 +56,8 @@
                 </tr>
             </tbody>
         </table>
-        <button @click="generateJSON" style="margin-top: 2%;">Send Data</button>
+        <div id="successMessage" style="display: none; color: green;">Configuration Successful</div>
+        <button @click="generateJSON" style="margin-top: 2%;">Apply</button>
     </div>
 </template>
 
@@ -125,9 +126,19 @@ function generateJSON() {
             "config_change": true
         }
     };
-    console.log(JSON.stringify(json, 2, null))
+    // console.log(JSON.stringify(json, 2, null))
+     // Display success message
+    const successMessage = document.getElementById('successMessage');
+    successMessage.style.display = 'block';
+    slotCount.value = 1;
+    slotData.value = [{ duration: 0, q7: false, q6: false, q5: false, q4: false, q3: false, q2: false, q1: false, q0: false }];
+
     // Assuming $wsServices is an instance of WebSocket service
     $wsServices.sendTas(json);
+    // Hide success message after 5 seconds
+    setTimeout(() => {
+        successMessage.style.display = 'none';
+    }, 5000); // 5000 milliseconds = 5 seconds
 }
 
 watch(slotCount, (newValue) => {
