@@ -1,16 +1,20 @@
 <template>
-    <div class="container">
-        <div class="chart-container">
-            <div class="title-row">
-                <h3 class="title">Real-Time Bandwidth Utilization</h3>
-                <button class="btn btn-primary" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
-            </div>
-            <div class="svg-row">
-                <div class="chart-content">
-                    <svg ref="chart"></svg>
-                </div>
-            </div>
-        </div>
+  <div class="d-flex flex-column plot-container">
+    <div class="d-flex flex-row flex-grow-1 justify-content-center align-items-center">
+      <h3 class="title">Real-Time Bandwidth Utilization</h3>
+      <button class="btn btn-primary ms-2" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
+    </div>
+    <div class="chart-container">
+<!--            <div class="title-row">-->
+<!--                <h3 class="title">Real-Time Bandwidth Utilization</h3>-->
+<!--                <button class="btn btn-primary" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>-->
+<!--            </div>-->
+       <div class="svg-row">
+           <div class="chart-content">
+               <svg ref="chart"></svg>
+           </div>
+       </div>
+    </div>
     </div>
 </template>
 
@@ -42,7 +46,7 @@ export default {
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // Append title
             // svg.append("text")
@@ -90,7 +94,7 @@ export default {
                 .attr("text-anchor", "middle")
                 .text("Mbit/second") // Y axis label
                 .style("font", "18px arial");
-            
+
             // Append gridlines for x-axis
             // svg.append("g")
             //     .attr("class", "grid")
@@ -225,9 +229,8 @@ export default {
 </script>
 
 <style>
-.container {
-    display: flex;
-    justify-content: center;
+.plot-container {
+  width: 100%;
 }
 
 .chart-container {
@@ -242,7 +245,9 @@ export default {
 }
 
 .title {
-    margin-right: 10px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 </style>

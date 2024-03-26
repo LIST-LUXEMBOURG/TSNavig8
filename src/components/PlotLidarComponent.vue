@@ -1,28 +1,37 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2">
-        <div class="d-flex flex-column">
-          <button :class="buttonClass" @click="toggleLidar" id="lidarButton">
-            <i class="bi bi-radar"></i>
-          </button>
-          <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">{{ trafficButtonText }}</button>
-          <button :class="tasButtonClass" @click="toggleTas" id="tasButton">{{ tasButtonText }}</button>
-
-          <!-- <button class="btn btn-success m-2" id="enableTraffic" @click.prevent="enableNoise">GENERATE TRAFFIC</button> -->
-          <!-- <button class="btn btn-danger m-2" id="disableTraffic" @click.prevent="disableNoise">STOP TRAFFIC</button> -->
-          <!-- <button class="btn btn-success m-2" id="enableTas" @click.prevent="enableTas">ENABLE TAS</button>
-          <button class="btn btn-danger m-2" id="disableTas" @click.prevent="disableTas">DISABLE TAS</button> -->
-          <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
-          <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS</button>
-        </div>
-      </div>
-
-      <div class="col-md-8">
-        <h3>Lidar Vizualization</h3>
-        <canvas id="lidar-container"></canvas>
-      </div>
+  <div class="d-flex flex-column">
+    <div class="d-flex flex-row flex-grow-1 justify-content-center">
+      <h3 class="title">Lidar Visualization</h3>
     </div>
+    <div class="d-flex flex-row flex-grow-1 justify-content-center">
+      <button :class="buttonClass" @click="toggleLidar" id="lidarButton">
+        <i class="bi bi-radar"></i>
+      </button>
+      <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">
+        <i class="bi bi-infinity"></i>
+      </button>
+      <button :class="tasButtonClass" @click="toggleTas" id="tasButton">{{ tasButtonText }}</button>
+      <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
+      <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS</button>
+    </div>
+<!--    <div class="row">-->
+<!--      <div class="col-md-2">-->
+<!--        <div class="d-flex flex-column">-->
+<!--          <button :class="buttonClass" @click="toggleLidar" id="lidarButton">-->
+<!--            <i class="bi bi-radar"></i>-->
+<!--          </button>-->
+<!--          <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">{{ trafficButtonText }}</button>-->
+
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="col-md-8">-->
+<!--        <h3>Lidar Vizualization</h3>-->
+    <div class="d-flex flex-row flex-grow-1">
+      <canvas id="lidar-container"></canvas>
+    </div>
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -199,6 +208,9 @@ function toggleTas() {
 function buttonClass() {
   return lidarRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
 }
+function trafficButtonClass() {
+  return trafficRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
+}
 
 function updateButtonStates() {
 
@@ -209,7 +221,7 @@ function updateButtonStates() {
   }
   const trafficButton = document.getElementById('trafficButton');
   if (trafficButton) {
-    trafficButton.innerText = trafficButtonText();
+    // trafficButton.innerText = trafficButtonText();
     trafficButton.className = trafficButtonClass();
   }
   const tasButton = document.getElementById('tasButton');
@@ -225,12 +237,10 @@ function updateButtonStates() {
 }
 
 
-function trafficButtonText() {
-  return trafficRunning ? 'STOP TRAFFIC' : 'GENERATE TRAFFIC';
-}
-function trafficButtonClass() {
-  return trafficRunning ? 'btn btn-danger m-2' : 'btn btn-success m-2';
-}
+// function trafficButtonText() {
+//   return trafficRunning ? 'STOP TRAFFIC' : 'GENERATE TRAFFIC';
+// }
+
 
 function tasButtonText() {
   return tasRunning ? 'DISABLE TAS' : 'ENABLE TAS';
@@ -271,10 +281,15 @@ function resetTas() {
 </script>
 
 <style scoped>
+.title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 .button-rounded {
   width: 40px;
   height: 40px;
-  padding: 6px 0;
+  padding: 4px 0;
   border-radius: 20px;
   font-size: 8px;
   text-align: center;
@@ -283,5 +298,14 @@ function resetTas() {
 .bi-radar {
   font-size: 20px;
   color: #ffffff;
+}
+.bi-infinity {
+  font-size: 20px;
+  color: #ffffff;
+}
+#lidar-container {
+  min-width: 100%;
+  width: 100%;
+  padding: 5px;
 }
 </style>
