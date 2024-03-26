@@ -3,7 +3,9 @@
     <div class="row">
       <div class="col-md-2">
         <div class="d-flex flex-column">
-          <button :class="buttonClass" @click="toggleLidar" id="lidarButton">{{ buttonText }}</button>
+          <button :class="buttonClass" @click="toggleLidar" id="lidarButton">
+            <i class="bi bi-radar"></i>
+          </button>
           <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">{{ trafficButtonText }}</button>
           <button :class="tasButtonClass" @click="toggleTas" id="tasButton">{{ tasButtonText }}</button>
 
@@ -191,18 +193,18 @@ function toggleTas() {
   updateButtonStates();
 }
 
-function buttonText() {
-  return lidarRunning ? 'STOP LIDAR' : 'START LIDAR';
-}
+// function buttonText() {
+//   return lidarRunning ? 'STOP LIDAR' : 'START LIDAR';
+// }
 function buttonClass() {
-  return lidarRunning ? 'btn btn-danger m-2' : 'btn btn-success m-2';
+  return lidarRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
 }
 
 function updateButtonStates() {
 
   const button = document.getElementById('lidarButton');
   if (button) {
-    button.innerText = buttonText();
+//    button.innerText = buttonText();
     button.className = buttonClass();
   }
   const trafficButton = document.getElementById('trafficButton');
@@ -268,4 +270,18 @@ function resetTas() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.button-rounded {
+  width: 40px;
+  height: 40px;
+  padding: 6px 0;
+  border-radius: 20px;
+  font-size: 8px;
+  text-align: center;
+}
+
+.bi-radar {
+  font-size: 20px;
+  color: #ffffff;
+}
+</style>
