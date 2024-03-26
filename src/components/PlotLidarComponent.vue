@@ -1,10 +1,13 @@
 <template>
-  <div class="d-flex flex-column">
+  <div class="d-flex flex-column mt-2">
     <div class="d-flex flex-row flex-grow-1 justify-content-center">
       <h3 class="title">Lidar Visualization</h3>
     </div>
     <div class="d-flex flex-row flex-grow-1 justify-content-center">
-      <button :class="buttonClass" @click="toggleLidar" id="lidarButton">
+      <button :class="buttonClass" @click="toggleLidar" id="lidarButton"
+              data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="custom-tooltip"
+              data-bs-title="Start/Stop lidar">
         <i class="bi bi-radar"></i>
       </button>
       <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">
@@ -37,6 +40,7 @@
 
 
 <script setup>
+import { Tooltip } from 'bootstrap';
 import * as THREE from 'three';
 import { onMounted, ref, inject, computed, onDeactivated } from "vue";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -52,7 +56,16 @@ let lidarRunning = true;
 let tasRunning = false
 let trafficRunning = false
 
+let tooltipLidarEl = null
+let tooltipLidar = null
+
 onMounted(() => {
+  tooltipLidarEl = document.getElementById('lidarButton')
+  tooltipLidar = Tooltip.getOrCreateInstance(tooltipLidarEl)
+  tooltipLidarEl.addEventListener('shown.bs.tooltip', () => {
+    console.log("show")
+  })
+  tooltipLidar.hide()
   $wsServices.connect()
   sceneInitialisation()
   displayPoints()
@@ -165,6 +178,7 @@ function animate() {
   // axesHelper.dispose()
 }
 function toggleLidar() {
+  tooltipLidar.hide()
   if (lidarRunning) {
     lidarRunning = false;
     $wsServices.disconnect();

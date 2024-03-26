@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column plot-container">
+  <div class="d-flex flex-column plot-container mt-2">
     <div class="d-flex flex-row flex-grow-1 justify-content-center align-items-center">
       <h3 class="title">Real-Time Bandwidth Utilization</h3>
       <button class="btn btn-primary ms-2" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
