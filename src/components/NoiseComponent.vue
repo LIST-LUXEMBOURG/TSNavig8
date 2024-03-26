@@ -89,7 +89,7 @@ function configure() {
 //        alert("Transmission Rate must be between 1 and 100%");
     error.value = true
     console.log("transmissionRate: " + transmissionRate.value)
-    configurationMsg.value = configurationMsg.value + "\bsTransmission Rate\be must be between 1 and 100%\n"
+    configurationMsg.value = configurationMsg.value + "\bsTransmission Rate\be must be between 1 and 100%!\n"
     // toastBootstrap.show()
     // return;
   }
