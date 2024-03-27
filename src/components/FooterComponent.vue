@@ -1,18 +1,48 @@
 <!-- Footer.vue -->
+<script setup>
+</script>
+
 <template>
-    <footer class="footer">
-      <div class="container">
-        <span >This is a simple footer.</span>
+  <footer class="footer">
+      <div class="d-flex flex-row justify-content-between align-items-center flex-grow-1">
+        <img src="../assets/list_logo.png" alt="logo-list" class="footer-logo" height="40px"/>
+        <p class="project-title">(C)2024 LEONE project</p>
+        <img src="../assets/FNR_LOGO_Black.png" alt="logo-fnr" class="footer-logo" height="40px"/>
       </div>
-    </footer>
-  </template>
-  
-  <style scoped>
+  </footer>
+</template>
+
+<style scoped>
+.footer {
+  position: fixed;
+  width: calc(100% - 24px);
+  bottom: 0;
+  //background-color: #d3c4b2;
+  padding: 30px 10px;
+  color: black;
+  border-top: 10px double #b8b4c3;
+  background: #ffffff;
+}
+
+@media screen and (max-width: 1540px) {
   .footer {
-    background-color: #707070;
-    padding: 30px 0;
-    text-align: center;
-    color: white;
+    position: relative;
+    width: calc(100% - 24px);
+    padding: 30px 10px;
+    color: black;
+    border-top: 10px double #b8b4c3;
+    background: #ffffff;
   }
-  </style>
-  
+}
+.footer-logo {
+  width: 200px;
+}
+.project-title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+</style>
+
