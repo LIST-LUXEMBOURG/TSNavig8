@@ -5,7 +5,7 @@ import logging
 from threading import Thread
 from websocket_server import WebsocketServer
 
-host = '10.150.2.5'
+host = '10.150.2.48'
 port = 9000
 
 logger = logging.getLogger('mylogger-notif')

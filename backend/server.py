@@ -14,7 +14,7 @@ NUMBER_OF_BLOCKS = 12
 TAIL_SIZE = 6
 udp_host = '192.168.4.102'
 udp_port = 6699
-host = '10.150.2.5'
+host = '10.150.2.48'
 port = 8765
 current_timestamp = -1
 # Mapping of channel numbers to vertical angles
@@ -248,12 +248,19 @@ def message_received(client, server, message):
     #         subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test2-tas.json', '-n', '1'], check=True)
     #     except subprocess.CalledProcessError as e:
     #         print(f"Error executing command: {e}")
-    elif message == "negative-tas":
+    elif message == "enable-negative":
         try:           
             # subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/mtsn_demo/configs/test1-tas.json', '-n', '1'], check=True)
 
             subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/negative-tas.json', '-n', '1'], check=True)
             subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'start_traf_gen.py', '--port', '0'], check=True)
+
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+    elif message == "disable-negative":
+        try:           
+            subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'stop_traf_gen.py', '--port', '0'], check=True)
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/disable-tas.json', '-n', '1'], check=True)
 
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
