@@ -14,7 +14,7 @@
                 {
                     "index": 1,
                     "operation_name": "set-gate-states",
-                    "gate_states_value": 239,
+                    "gate_states_value": 247,
                     "time_interval_value": 76000
                 },
                 {
