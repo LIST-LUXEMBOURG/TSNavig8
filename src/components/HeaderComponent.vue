@@ -3,7 +3,7 @@
         <header class="d-flex justify-content-between align-items-center">
             <div>
             <h3 class="title">{{ props.title }}</h3>
-            <p class="sub-title">Authors: Darinela Andronovici, Damien Nicolas, Ion Turcanu, and Cristoph Sommer</p>
+            <p class="sub-title">Authors: Darinela Andronovici, Damien Nicolas, Ion Turcanu, and Christoph Sommer</p>
         </div>
             <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 aria-controls="offcanvasRight"> <i class="bi bi-list"></i></button>
