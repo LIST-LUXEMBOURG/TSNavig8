@@ -74,55 +74,55 @@ export class WSServices {
         return this.store;
     }
 
-    enableTas() {
-        if (this.ws != null) {
-            this.ws.send('enable-tas')
-        }
-    }
-    disableTas() {
-        if (this.ws != null) {
-            this.ws.send('disable-tas')
-        }
-    }
-    enableNoise() {
-        if (this.ws != null) {
-            this.ws.send('enable-noise')
-        }
-    }
-    disableNoise() {
-        if (this.ws != null) {
-            this.ws.send('disable-noise')
-        }
-    }
+    // enableTas() {
+    //     if (this.ws != null) {
+    //         this.ws.send('enable-tas')
+    //     }
+    // }
+    // disableTas() {
+    //     if (this.ws != null) {
+    //         this.ws.send('disable-tas')
+    //     }
+    // }
+    // enableNoise() {
+    //     if (this.ws != null) {
+    //         this.ws.send('enable-noise')
+    //     }
+    // }
+    // disableNoise() {
+    //     if (this.ws != null) {
+    //         this.ws.send('disable-noise')
+    //     }
+    // }
 
-    sendTas(jsonFile) {
-        if (this.ws != null) {
-            this.ws.send(JSON.stringify(jsonFile))
-        }
-    }
+    // sendTas(jsonFile) {
+    //     if (this.ws != null) {
+    //         this.ws.send(JSON.stringify(jsonFile))
+    //     }
+    // }
 
-    configureNoise(text) {
-        if (this.ws != null) {
-            this.ws.send(text)
-        }
-    }
+    // configureNoise(text) {
+    //     if (this.ws != null) {
+    //         this.ws.send(text)
+    //     }
+    // }
 
-    enableNegative() {
-        if (this.ws != null) {
-            this.ws.send('enable-negative')
-        }
-    }
+    // enableNegative() {
+    //     if (this.ws != null) {
+    //         this.ws.send('enable-negative')
+    //     }
+    // }
 
-    disableNegative() {
-        if (this.ws != null) {
-            this.ws.send('disable-negative')
-        }
-    }
+    // disableNegative() {
+    //     if (this.ws != null) {
+    //         this.ws.send('disable-negative')
+    //     }
+    // }
 
-    resetTas() {
-        if (this.ws != null) {
-            this.ws.send('reset-tas')
-        }
-    }
+    // resetTas() {
+    //     if (this.ws != null) {
+    //         this.ws.send('reset-tas')
+    //     }
+    // }
 
 }

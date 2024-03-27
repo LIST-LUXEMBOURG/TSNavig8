@@ -52,6 +52,8 @@ import * as THREE from 'three';
 import { onMounted, ref, inject, computed, onDeactivated } from "vue";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 const $wsServices = inject('$wsservices')
+const $wsConfServices = inject('$wscservices'); 
+
 let pointsData = computed(() => { return $wsServices.getStore().getLidarData })
 let cameraZ = ref(500)
 let scene = null
@@ -111,12 +113,14 @@ onMounted(() => {
   tooltipReset.hide()
 
   $wsServices.connect()
+  $wsConfServices.connect()
   sceneInitialisation()
   displayPoints()
 })
 
 onDeactivated(() => {
   $wsServices.disconnect();
+  $wsConfServices.disconnect();
   $wsServices.getStore().setLidarData([]);
 })
 
@@ -239,11 +243,11 @@ function toggleTraffic() {
   tooltipTraffic.hide()
   if (trafficRunning) {
     trafficRunning = false;
-    $wsServices.disableNoise();
+    $wsConfServices.disableNoise();
   }
   else {
     trafficRunning = true;
-    $wsServices.enableNoise();
+    $wsConfServices.enableNoise();
   }
   updateButtonStates();
 
@@ -253,11 +257,11 @@ function toggleTas() {
   tooltipTas.hide()
   if (tasRunning) {
     tasRunning = false;
-    $wsServices.disableTas();
+    $wsConfServices.disableTas();
   }
   else {
     tasRunning = true;
-    $wsServices.enableTas();
+    $wsConfServices.enableTas();
   }
   updateButtonStates();
 }
@@ -266,11 +270,11 @@ function toggleNegative() {
   tooltipNegative.hide()
   if (negativeRunning) {
     negativeRunning = false;
-    $wsServices.disableNegative();
+    $wsConfServices.disableNegative();
   }
   else {
     negativeRunning = true;
-    $wsServices.enableNegative();
+    $wsConfServices.enableNegative();
   }
   updateButtonStates();
 }
@@ -317,7 +321,7 @@ function tasButtonClass() {
 
 function resetTas() {
   tasRunning = true;
-  $wsServices.resetTas();
+  $wsConfServices.resetTas();
   updateButtonStates();
 }
 </script>
