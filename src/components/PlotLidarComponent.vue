@@ -10,26 +10,33 @@
               data-bs-title="Start/Stop lidar">
         <i class="bi bi-radar"></i>
       </button>
-      <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">
-        <i class="bi bi-infinity"></i>
+      <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton"
+              data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="custom-tooltip"
+              data-bs-title="Start/Stop traffic">
+        <i class="bi bi-activity"></i>
       </button>
-      <button :class="tasButtonClass" @click="toggleTas" id="tasButton">{{ tasButtonText }}</button>
-      <button class="btn btn-success m-2" id="negativeTest" @click.prevent="negativeTest">NEGATIVE TEST</button>
-      <button class="btn btn-success m-2" id="resetTas" @click.prevent="resetTas">DEFAULT TAS</button>
+      <button :class="tasButtonClass" @click="toggleTas" id="tasButton"
+              data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="custom-tooltip"
+              data-bs-title="Enable/Disable TAS">
+        <i class="bi bi-list-ol"></i>
+      </button>
+
+      <button class="negativeButtonClass" @click="toggleNegative" id="negativeTest"
+              data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="custom-tooltip"
+              data-bs-title="Enable/Disable Negative TAS">
+        <i class="bi bi-x-circle"></i>
+      </button>
+      <button class="btn btn-success m-2 button-rounded" id="resetTas" @click.prevent="resetTas"
+              data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="custom-tooltip"
+              data-bs-title="Reset TAS">
+        <i class="bi bi-arrow-counterclockwise"></i>
+      </button>
     </div>
-<!--    <div class="row">-->
-<!--      <div class="col-md-2">-->
-<!--        <div class="d-flex flex-column">-->
-<!--          <button :class="buttonClass" @click="toggleLidar" id="lidarButton">-->
-<!--            <i class="bi bi-radar"></i>-->
-<!--          </button>-->
-<!--          <button :class="trafficButtonClass" @click="toggleTraffic" id="trafficButton">{{ trafficButtonText }}</button>-->
 
-<!--        </div>-->
-<!--      </div>-->
-
-<!--      <div class="col-md-8">-->
-<!--        <h3>Lidar Vizualization</h3>-->
     <div class="d-flex flex-row flex-grow-1">
       <canvas id="lidar-container"></canvas>
     </div>
@@ -55,17 +62,54 @@ let controls = null
 let lidarRunning = true;
 let tasRunning = false
 let trafficRunning = false
+let negativeRunning = false
 
 let tooltipLidarEl = null
 let tooltipLidar = null
 
+let tooltipTrafficEl = null
+let tooltipTraffic = null
+
+let tooltipTasEl = null
+let tooltipTas = null
+
+let tooltipNegativeEl = null
+let tooltipNegative = null
+
+let tooltipResetEl = null
+let tooltipReset = null
 onMounted(() => {
   tooltipLidarEl = document.getElementById('lidarButton')
   tooltipLidar = Tooltip.getOrCreateInstance(tooltipLidarEl)
   tooltipLidarEl.addEventListener('shown.bs.tooltip', () => {
     console.log("show")
   })
+  tooltipTrafficEl = document.getElementById('trafficButton')
+  tooltipTraffic = Tooltip.getOrCreateInstance(tooltipTrafficEl)
+  tooltipTrafficEl.addEventListener('shown.bs.tooltip', () => {
+    console.log("show")
+  })
+  tooltipTasEl = document.getElementById('tasButton')
+  tooltipTas = Tooltip.getOrCreateInstance(tooltipTasEl)
+  tooltipTasEl.addEventListener('shown.bs.tooltip', () => {
+    console.log("show")
+  })
+  tooltipNegativeEl = document.getElementById('negativeTest')
+  tooltipNegative = Tooltip.getOrCreateInstance(tooltipNegativeEl)
+  tooltipNegativeEl.addEventListener('shown.bs.tooltip', () => {
+    console.log("show")
+  })
+  tooltipResetEl = document.getElementById('resetTas')
+  tooltipReset = Tooltip.getOrCreateInstance(tooltipResetEl)
+  tooltipResetEl.addEventListener('shown.bs.tooltip', () => {
+    console.log("show")
+  })
   tooltipLidar.hide()
+  tooltipTraffic.hide()
+  tooltipTas.hide()
+  tooltipNegative.hide()
+  tooltipReset.hide()
+
   $wsServices.connect()
   sceneInitialisation()
   displayPoints()
@@ -192,6 +236,7 @@ function toggleLidar() {
 }
 
 function toggleTraffic() {
+  tooltipTraffic.hide()
   if (trafficRunning) {
     trafficRunning = false;
     $wsServices.disableNoise();
@@ -205,20 +250,31 @@ function toggleTraffic() {
 }
 
 function toggleTas() {
+  tooltipTas.hide()
   if (tasRunning) {
     tasRunning = false;
     $wsServices.disableTas();
   }
   else {
     tasRunning = true;
-  $wsServices.enableTas();
+    $wsServices.enableTas();
   }
   updateButtonStates();
 }
 
-// function buttonText() {
-//   return lidarRunning ? 'STOP LIDAR' : 'START LIDAR';
-// }
+function toggleNegative() {
+  tooltipNegative.hide()
+  if (negativeRunning) {
+    negativeRunning = false;
+    $wsServices.disableNegative();
+  }
+  else {
+    negativeRunning = true;
+    $wsServices.enableNegative();
+  }
+  updateButtonStates();
+}
+
 function buttonClass() {
   return lidarRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
 }
@@ -226,65 +282,37 @@ function trafficButtonClass() {
   return trafficRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
 }
 
+function negativeButtonClass() {
+  return negativeRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
+}
+
+
 function updateButtonStates() {
 
   const button = document.getElementById('lidarButton');
   if (button) {
-//    button.innerText = buttonText();
     button.className = buttonClass();
   }
   const trafficButton = document.getElementById('trafficButton');
   if (trafficButton) {
-    // trafficButton.innerText = trafficButtonText();
     trafficButton.className = trafficButtonClass();
   }
   const tasButton = document.getElementById('tasButton');
   if (tasButton) {
-    tasButton.innerText = tasButtonText();
     tasButton.className = tasButtonClass();
   }
+  const negativeButton = document.getElementById('negativeTest');
+  if (negativeButton) {
+    negativeButton.className = negativeButtonClass();
+  }
 
-  // updateButtonState("enableTas", tasRunning);
-  updateButtonState("negativeTest", tasRunning);
-  updateButtonState("resetTas", tasRunning);
-  // updateButtonState("disableTas", !tasRunning);
+  tooltipReset.hide()
+  document.getElementById("resetTas").disabled = tasRunning;
+
 }
 
-
-// function trafficButtonText() {
-//   return trafficRunning ? 'STOP TRAFFIC' : 'GENERATE TRAFFIC';
-// }
-
-
-function tasButtonText() {
-  return tasRunning ? 'DISABLE TAS' : 'ENABLE TAS';
-}
 function tasButtonClass() {
-  return tasRunning ? 'btn btn-danger m-2' : 'btn btn-success m-2';
-}
-
-function updateButtonState(buttonId, running) {
-  document.getElementById(buttonId).disabled = running;
-}
-// function enableTas() {
-//   tasRunning = true;
-//   $wsServices.enableTas();
-//   updateButtonStates();
-// }
-
-// function disableTas() {
-//   tasRunning = false;
-//   $wsServices.disableTas();
-//   updateButtonStates();
-// }
-
-
-
-function negativeTest() {
-  tasRunning = true;
-  trafficRunning = true;
-  $wsServices.negativeTest();
-  updateButtonStates();
+  return tasRunning ? 'btn btn-danger m-2 button-rounded' : 'btn btn-success m-2 button-rounded';
 }
 
 function resetTas() {
@@ -309,14 +337,11 @@ function resetTas() {
   text-align: center;
 }
 
-.bi-radar {
+.bi-radar,.bi-activity, .bi-list-ol, .bi-x-circle, .bi-arrow-counterclockwise{
   font-size: 20px;
   color: #ffffff;
 }
-.bi-infinity {
-  font-size: 20px;
-  color: #ffffff;
-}
+
 #lidar-container {
   min-width: 100%;
   width: 100%;

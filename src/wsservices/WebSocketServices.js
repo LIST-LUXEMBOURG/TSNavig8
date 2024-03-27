@@ -107,9 +107,15 @@ export class WSServices {
         }
     }
 
-    negativeTest() {
+    enableNegative() {
         if (this.ws != null) {
-            this.ws.send('negative-tas')
+            this.ws.send('enable-negative')
+        }
+    }
+
+    disableNegative() {
+        if (this.ws != null) {
+            this.ws.send('disable-negative')
         }
     }
 
