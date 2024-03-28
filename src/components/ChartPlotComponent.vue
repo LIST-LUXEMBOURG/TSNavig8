@@ -53,7 +53,7 @@ function getChartConfig() {
           },
           ticks: {
             font: {
-              size: 18 
+              size: 18
             }
           }
         },
@@ -67,7 +67,7 @@ function getChartConfig() {
           },
           ticks: {
             font: {
-              size: 18 
+              size: 18
             }
           }
         }
@@ -84,7 +84,7 @@ function getChartConfig() {
         legend: {
           labels: {
             font: {
-              size: 18 
+              size: 18
             }
           }
         },
@@ -192,13 +192,13 @@ onUnmounted(() => {
   display: flex;
   flex-direction: row;
   position: relative;
-  height: 600px !important;
+  height: 750px !important;
   padding: 5px;
   margin-top: 31px;
 }
 
 #myChart {
-  border: 1px solid red;
+  //border: 1px solid red;
   padding: 15px;
 }
 </style>
