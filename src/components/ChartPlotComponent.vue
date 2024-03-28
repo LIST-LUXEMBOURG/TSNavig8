@@ -12,6 +12,8 @@ let ctx = ref(null)
 let myChart = ref(null)
 let chartConfig = null
 let chartWidth = ref(null)
+let headerWidth = ref(null)
+let lidarWidth = ref(null)
 
 
 function getChartConfig() {
@@ -90,9 +92,20 @@ function onRefresh(chart) {
       y: randomScalingFactor()
     });
   });
-  chartWidth = document.getElementById("wrapper").offsetWidth
-  console.log("wrapper width: " + chartWidth)
-  document.getElementById("chart-wrapper").setAttribute("style", "width: " + chartWidth + "px")
+  headerWidth = document.getElementById("header-wrapper").offsetWidth
+  console.log("header width: " + headerWidth)
+  if (headerWidth > 1400) {
+    chartWidth = document.getElementById("wrapper").offsetWidth
+    lidarWidth = document.getElementById("lidar-wrapper").offsetWidth
+    console.log("wrapper width: " + chartWidth)
+    const newWidth = (headerWidth - lidarWidth) - 10
+    document.getElementById("wrapper").setAttribute("style", "width: " + newWidth + "px")
+    document.getElementById("chart-wrapper").setAttribute("style", "width: " + newWidth + "px")
+  }
+  else {
+    document.getElementById("wrapper").setAttribute("style", "width: 100%")
+    document.getElementById("chart-wrapper").setAttribute("style", "width: 100%")
+  }
 }
 
 onMounted(() => {
@@ -101,20 +114,19 @@ onMounted(() => {
   Chart.register(...registerables)
   Chart.register(ChartStreaming)
   myChart = new Chart(ctx, getChartConfig());
-  chartWidth = document.getElementById("wrapper").offsetWidth
 
 })
 </script>
 
 <template>
-  <div class="d-flex flex-column plotchart-container">
-    <div class="d-flex flex-column mt-2" id="wrapper">
+  <div class="d-flex flex-column plotchart-container" id="wrapper">
+    <div class="d-flex flex-column mt-2">
       <div class="d-flex flex-row justify-content-center mb-4">
         <h3 class="title">Real-Time Bandwidth Utilization</h3>
         <button class="btn btn-primary ms-2" ><i class="bi bi-arrow-clockwise"></i></button>
       </div>
     </div>
-    <div class="chart-wrapper" id="chart-wrapper" style="width: 600px">
+    <div class="chart-wrapper" id="chart-wrapper">
           <canvas id="myChart"></canvas>
     </div>
   </div>
@@ -133,7 +145,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   position: relative;
-  height: 500px !important;
+  height: 600px !important;
   padding: 5px;
   margin-top: 31px;
 }

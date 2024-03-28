@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column mt-2">
+  <div class="d-flex flex-column mt-2" id="lidar-wrapper">
     <div class="d-flex flex-row flex-grow-1 justify-content-center">
       <h3 class="title">Lidar Visualization</h3>
     </div>
@@ -52,7 +52,7 @@ import * as THREE from 'three';
 import { onMounted, ref, inject, computed, onDeactivated } from "vue";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 const $wsServices = inject('$wsservices')
-const $wsConfServices = inject('$wscservices'); 
+const $wsConfServices = inject('$wscservices');
 
 let pointsData = computed(() => { return $wsServices.getStore().getLidarData })
 let cameraZ = ref(500)
