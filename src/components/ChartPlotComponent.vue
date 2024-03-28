@@ -1,10 +1,10 @@
 <script setup>
 /* eslint-disable */
-import {Chart, registerables} from "chart.js";
+import { Chart, registerables } from "chart.js";
 import { color } from 'chart.js/helpers'
 import 'chartjs-adapter-luxon'
 import ChartStreaming from 'chartjs-plugin-streaming';
-import {onMounted, ref} from "vue";
+import { onMounted, ref, onUnmounted, inject } from "vue";
 
 // Variables declarations
 let canvas = ref(null)
@@ -14,14 +14,15 @@ let chartConfig = null
 let chartWidth = ref(null)
 let headerWidth = ref(null)
 let lidarWidth = ref(null)
-
+const wsService = inject('$wstservices');
+let latestWebSocketData = ref(null);
 
 function getChartConfig() {
   chartConfig = {
     type: 'line',
     data: {
       datasets: [{
-        label: 'Dataset 1 (linear interpolation)',
+        label: 'LiDAR',
         backgroundColor: color(chartColors.red).alpha(0.5).rgbString(),
         borderColor: chartColors.red,
         fill: false,
@@ -29,7 +30,7 @@ function getChartConfig() {
         // borderDash: [8, 4],
         data: []
       }, {
-        label: 'Dataset 2 (cubic interpolation)',
+        label: 'All',
         backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
         borderColor: chartColors.blue,
         fill: false,
@@ -38,20 +39,36 @@ function getChartConfig() {
       }]
     },
     options: {
-      title: {
-        display: true,
-        text: 'Line chart (horizontal scroll) sample'
-      },
       responsive: true,
       maintainAspectRatio: false,
       scales: {
         x: {
-          type: 'realtime'
+          type: 'realtime',
+          title: {
+            display: true,
+            text: 'Time',
+            font: {
+              size: 18
+            }
+          },
+          ticks: {
+            font: {
+              size: 18 
+            }
+          }
         },
         y: {
-          scaleLabel: {
+          title: {
             display: true,
-            labelString: 'value'
+            text: 'Mbit/second',
+            font: {
+              size: 18
+            }
+          },
+          ticks: {
+            font: {
+              size: 18 
+            }
           }
         }
       },
@@ -64,12 +81,20 @@ function getChartConfig() {
         intersect: false
       },
       plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 18 
+            }
+          }
+        },
         streaming: {
           duration: 15000,
           refresh: 1000,
           delay: 2000,
           onRefresh: onRefresh
-        }
+        },
+
       }
     }
   };
@@ -81,23 +106,36 @@ const chartColors = {
   blue: 'rgb(54, 162, 235)',
 };
 
-function randomScalingFactor() {
-  return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+function onMessage(event) {
+  const newData = JSON.parse(event.data);
+  if (newData.type === "bandwidth_update") {
+    latestWebSocketData.value = newData;
+  }
+}
+
+
+function updateChartWithWebSocketData(chart) {
+  const newData = latestWebSocketData.value;
+  if (newData) {
+    const currentTime = Date.now();
+    chart.config.data.datasets.forEach((dataset, index) => {
+      const value = index === 0 ? newData.last_200 : newData.last_all;
+      dataset.data.push({ x: currentTime, y: value });
+    });
+    console.log("chart ", chart);
+    chart.update();
+  }
 }
 
 function onRefresh(chart) {
-  chart.config.data.datasets.forEach(function(dataset) {
-    dataset.data.push({
-      x: Date.now(),
-      y: randomScalingFactor()
-    });
-  });
+  updateChartWithWebSocketData(chart);
+
   headerWidth = document.getElementById("header-wrapper").offsetWidth
-  console.log("header width: " + headerWidth)
+  // console.log("header width: " + headerWidth)
   if (headerWidth > 1400) {
     chartWidth = document.getElementById("wrapper").offsetWidth
     lidarWidth = document.getElementById("lidar-wrapper").offsetWidth
-    console.log("wrapper width: " + chartWidth)
+    // console.log("wrapper width: " + chartWidth)
     const newWidth = (headerWidth - lidarWidth) - 10
     document.getElementById("wrapper").setAttribute("style", "width: " + newWidth + "px")
     document.getElementById("chart-wrapper").setAttribute("style", "width: " + newWidth + "px")
@@ -114,7 +152,14 @@ onMounted(() => {
   Chart.register(...registerables)
   Chart.register(ChartStreaming)
   myChart = new Chart(ctx, getChartConfig());
+  // Connect to WebSocket
+  wsService.connect();
+  wsService.ws.onmessage = onMessage;
 
+})
+
+onUnmounted(() => {
+  wsService.disconnect();
 })
 </script>
 
@@ -123,11 +168,11 @@ onMounted(() => {
     <div class="d-flex flex-column mt-2">
       <div class="d-flex flex-row justify-content-center mb-4">
         <h3 class="title">Real-Time Bandwidth Utilization</h3>
-        <button class="btn btn-primary ms-2" ><i class="bi bi-arrow-clockwise"></i></button>
+        <!-- <button class="btn btn-primary ms-2" ><i class="bi bi-arrow-clockwise"></i></button> -->
       </div>
     </div>
     <div class="chart-wrapper" id="chart-wrapper">
-          <canvas id="myChart"></canvas>
+      <canvas id="myChart"></canvas>
     </div>
   </div>
 </template>
@@ -138,9 +183,11 @@ onMounted(() => {
   font-weight: 400;
   font-style: normal;
 }
+
 .plotchart-container {
   width: 100%
 }
+
 .chart-wrapper {
   display: flex;
   flex-direction: row;
@@ -149,6 +196,7 @@ onMounted(() => {
   padding: 5px;
   margin-top: 31px;
 }
+
 #myChart {
   border: 1px solid red;
   padding: 15px;
