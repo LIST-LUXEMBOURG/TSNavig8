@@ -1,6 +1,5 @@
 <script setup>
 import PlotLidarComponent from "@/components/PlotLidarComponent.vue";
-// import PlotComponent from "@/components/PlotComponent.vue";
 import ChartPlotComponent from "@/components/ChartPlotComponent.vue";
 
 </script>
@@ -8,7 +7,6 @@ import ChartPlotComponent from "@/components/ChartPlotComponent.vue";
 <template>
   <div class="main-content-container">
     <PlotLidarComponent />
-<!--    <PlotComponent />-->
     <ChartPlotComponent />
   </div>
 

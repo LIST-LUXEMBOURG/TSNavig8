@@ -171,7 +171,7 @@ function displayPoints() {
       positions[i * 3 + 1] = $wsServices.getStore().getLidarData[i][1];
       positions[i * 3 + 2] = $wsServices.getStore().getLidarData[i][2];
 
-      let dst = $wsServices.getStore().getLidarData[i][4]; // distance in cm
+      let dst = $wsServices.getStore().getLidarData[i][3]; // distance in cm
       let clr = dst / 255;
       colors[i * 3] = 1 - clr;
       colors[i * 3 + 1] = clr;
@@ -198,7 +198,7 @@ function animate() {
       positions[i * 3 + 1] = $wsServices.getStore().getLidarData[i][1];
       positions[i * 3 + 2] = $wsServices.getStore().getLidarData[i][2];
 
-      let dst = $wsServices.getStore().getLidarData[i][4]; // distance in cm
+      let dst = $wsServices.getStore().getLidarData[i][3]; // distance in cm
       let clr = dst / 255;
       colors[i * 3] = 1 - clr;
       colors[i * 3 + 1] = clr;

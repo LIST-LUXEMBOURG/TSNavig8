@@ -77,7 +77,7 @@
 import {ref, inject, watch, onMounted} from 'vue';
 import {Toast} from "bootstrap";
 
-const $wsServices = inject('$wsservices');
+const $wsServices = inject('$wscservices');
 const slotCount = ref(1);
 const slotData = ref([{ duration: 0, q7: false, q6: false, q5: false, q4: false, q3: false, q2: false, q1: false, q0: false }]);
 let configurationTitle = ref('')

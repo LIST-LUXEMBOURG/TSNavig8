@@ -192,13 +192,13 @@ onUnmounted(() => {
   display: flex;
   flex-direction: row;
   position: relative;
-  height: 750px !important;
+  height: 650px !important;
   padding: 5px;
   margin-top: 31px;
 }
 
 #myChart {
-  //border: 1px solid red;
+  /* border: 1px solid red; */
   padding: 15px;
 }
 </style>

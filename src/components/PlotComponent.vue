@@ -5,10 +5,7 @@
       <button class="btn btn-primary ms-2" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>
     </div>
     <div class="chart-container">
-<!--            <div class="title-row">-->
-<!--                <h3 class="title">Real-Time Bandwidth Utilization</h3>-->
-<!--                <button class="btn btn-primary" @click.prevent="refreshPlot"><i class="bi bi-arrow-clockwise"></i></button>-->
-<!--            </div>-->
+
        <div class="svg-row">
            <div class="chart-content">
                <svg ref="chart"></svg>
@@ -47,14 +44,6 @@ export default {
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            // Append title
-            // svg.append("text")
-            //     .attr("x", (width + margin.left + margin.right) / 2)
-            //     .attr("y", -margin.top / 2) // Position above the plot area
-            //     .attr("text-anchor", "middle")
-            //     .style("font", "bold 22px arial")
-            //     .text("Real-Time Bandwidth Utilization");
 
             // Define x and y scales
             xScale = d3.scaleLinear().range([0, width]);
