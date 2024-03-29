@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="header-wrapper">
         <header class="d-flex justify-content-between align-items-center">
             <div>
             <h3 class="title">{{ props.title }}</h3>

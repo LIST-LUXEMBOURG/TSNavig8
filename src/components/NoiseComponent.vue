@@ -46,8 +46,8 @@ import { Toast } from 'bootstrap';
 
 const frameSize = ref(60);
 const priorityCodePoint = ref(0);
-const transmissionRate = ref(0);
-const $wsServices = inject('$wsservices');
+const transmissionRate = ref(1);
+const $wsServices = inject('$wscservices');
 let configurationTitle = ref('')
 let configurationMsg = ref('')
 //const toastTrigger = document.getElementById('liveToastBtn')
@@ -98,9 +98,6 @@ function configure() {
     configurationTitle.value = "Incorrect Configuration"
     toastBootstrap.show()
   }  else {
-    // Display success message.
-    // const successMessage = document.getElementById('succMessage');
-    // successMessage.style.display = 'block';
     configurationTitle.value = "Configuration"
     configurationMsg.value = "\bsConfiguration Successfully Applied!\be"
     toastBootstrap.show()
@@ -112,22 +109,6 @@ function configure() {
     // priorityCodePoint.value = 0;
     // transmissionRate.value = 1;
   }
-
-
-  // Display success message
-  // const successMessage = document.getElementById('succMessage');
-  // successMessage.style.display = 'block';
-  //
-  // $wsServices.configureNoise("--frame_size " + frameSize.value + " -p " + priorityCodePoint.value + " -pr " + transmissionRate.value)
-  // // Clear input fields
-  // frameSize.value = 60;
-  // priorityCodePoint.value = 0;
-  // transmissionRate.value = 0;
-
-  // Hide success message after 5 seconds
-  // setTimeout(() => {
-  //     successMessage.style.display = 'none';
-  // }, 5000); // 5000 milliseconds = 5 seconds
 }
 
 onMounted(() => {

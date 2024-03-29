@@ -24,7 +24,7 @@
   background: #ffffff;
 }
 
-@media screen and (max-width: 1540px) {
+@media screen and (max-width: 1400px) {
   .footer {
     position: relative;
     width: calc(100% - 24px);
