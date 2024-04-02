@@ -38,10 +38,10 @@ const props = defineProps({
 
 <style scoped>
 header {
-  //background-color: #d3c4b2;
+  /* background-color: #d3c4b2; */
   color: black;
   padding: 5px;
-  //text-align: left;
+  /* text-align: left; */
   margin-bottom: 10px;
   font-family: "Roboto", sans-serif;
   font-weight: 400;

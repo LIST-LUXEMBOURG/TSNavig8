@@ -122,7 +122,7 @@ function updateChartWithWebSocketData(chart) {
       const value = index === 0 ? newData.last_200 : newData.last_all;
       dataset.data.push({ x: currentTime, y: value });
     });
-    console.log("chart ", chart);
+    // console.log("chart ", chart);
     chart.update();
   }
 }

@@ -76,17 +76,42 @@ def message_received(client, server, message):
             outfile.write(message)
         try:
             # scp sample.json relyum@192.168.4.64:/usr/local/src/tsn_lidar
-            subprocess.run(['scp', 'tas.json', 'relyum@192.168.4.64:/usr/local/src/tsn_lidar'], check=True)
+            subprocess.run(['scp', 'tas.json', 'relyum@192.168.4.64:/usr/local/src/tsn_lidar'], check=True, timeout=7)
+            response = {"command": "qbv_gate_parameters",
+                        "status": "success", 
+                        "message": "Configuration applied successfully"}
+        except subprocess.TimeoutExpired:
+            response = {"command": "qbv_gate_parameters",
+                        "status": "timeout", 
+                        "message": "Connection to hardware timed out"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "qbv_gate_parameters",
+                        "status": "error", 
+                        "message": f"Error executing command: {e}"}
+        
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
+
     elif "--frame_size" in message:
         # print("Noise message: ", message.split(' '))
         try:          
             tmp = ['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'config_traf_gen.py', '--port', '0', '-vtag', '1', '-vid', '300']
             tmp.extend(message.split(' '))
-            subprocess.run(tmp, check=True)
+            subprocess.run(tmp, check=True, timeout=7)
+            response = {"command": "--frame_size",
+                        "status": "success", 
+                        "message": "Configuration applied successfully"}
+        except subprocess.TimeoutExpired:
+            response = {"command": "--frame_size",
+                        "status": "timeout", 
+                        "message": "Connection to hardware timed out"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "--frame_size",
+                        "status": "error", 
+                        "message": f"Error executing command: {e}"}
+
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
             
     else:
         logger.info('NOTIFICATION {} received from {}'.format(message, client))

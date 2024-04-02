@@ -46,6 +46,11 @@ export class WSCServices {
         this.ws.onerror = (error) => {
             console.error(error)
         }
+
+        // this.ws.onmessage = (event) => {
+        //     const msgs = JSON.parse(event.data)
+        //     console.log("hw mwssage", msgs)
+        // }
     }
 
     disconnect() {

@@ -61,6 +61,25 @@ function replaceWithBr() {
   return t2.replace(/\be/g, '</strong>');
 }
 
+const onMessage = (event) => {
+  const message = JSON.parse(event.data)
+  if (message.status == "success") {
+    // console.log("hw ", message)
+    error.value = false
+    configurationTitle.value = "Configuration"
+    configurationMsg.value = "\bsConfiguration Successfully Applied!\be"
+    toastBootstrap.show()
+
+  }
+  else {
+    error.value = true
+    configurationTitle.value = "Error"
+    configurationMsg.value = "\bsError while apllying the configuration!\be Check connection to the hardware!\be"
+    toastBootstrap.show()
+
+  }
+}
+
 
 function configure() {
     // Retrieve the values inserted by the user
@@ -98,12 +117,12 @@ function configure() {
     configurationTitle.value = "Incorrect Configuration"
     toastBootstrap.show()
   }  else {
-    configurationTitle.value = "Configuration"
-    configurationMsg.value = "\bsConfiguration Successfully Applied!\be"
-    toastBootstrap.show()
+    
 
 
     $wsServices.configureNoise("--frame_size " + frameSize.value + " -p " + priorityCodePoint.value + " -pr " + transmissionRate.value)
+    $wsServices.ws.onmessage = onMessage;
+
     // Clear input fields
     // frameSize.value = 60;
     // priorityCodePoint.value = 0;
