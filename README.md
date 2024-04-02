@@ -3,7 +3,10 @@
 1. Run the Python server
 ```
 cd backend
+mkdir logs
 python3 server.py
+python3 throughput_server.py
+python3 config_server.py
 ```
 2. Run the client app
 ```
