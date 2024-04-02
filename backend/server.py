@@ -3,19 +3,24 @@ import json
 import socket
 import base64
 import math
-import datetime
 from threading import Thread
 from websocket_server import WebsocketServer
-import subprocess
+import json
+
+# Load the JSON configuration file
+with open('../config.json', 'r') as config_file:
+    config = json.load(config_file)
+
 # Constants for header and data block sizes
 HEADER_SIZE = 42
 DATA_BLOCK_SIZE = 100
 NUMBER_OF_BLOCKS = 12
 TAIL_SIZE = 6
-udp_host = '192.168.4.102'
-udp_port = 6699
-host = '10.150.2.48'
-port = 8765
+udp_host = config['udp_listener']['host']
+udp_port = config['udp_listener']['port']
+host = config['lidar_server']['host']
+port = config['lidar_server']['port']
+print(udp_host)
 current_timestamp = -1
 # Mapping of channel numbers to vertical angles
 channel_vertical_angles = {

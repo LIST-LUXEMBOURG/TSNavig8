@@ -1,15 +1,15 @@
 import logging
 import json
-import socket
-import math
-from threading import Thread
 from websocket_server import WebsocketServer
 import subprocess
+import json
 
-udp_host = '192.168.4.102'
-udp_port = 6699
-host = '10.150.2.48'
-port = 7000
+# Load the JSON configuration file
+with open('../config.json', 'r') as config_file:
+    config = json.load(config_file)
+
+host = config['config_server']['host']
+port = config['config_server']['port']
 
 # Initialize logger for notifications
 logger = logging.getLogger('mylogger-notif')
