@@ -4,16 +4,12 @@ import json
 import logging
 from threading import Thread
 from websocket_server import WebsocketServer
-import json
+from decouple import config
 
-# Load the JSON configuration file
-with open('../config.json', 'r') as config_file:
-    config = json.load(config_file)
-
-host = config['throughput_server']['host']
-port = config['throughput_server']['port']
-eth_interface = config['throughput_server']['eth_interface']
-vlan_eth_interface = config['throughput_server']['vlan_eth_interface']
+host = config('THROUGHPUT_SERVER_HOST')
+port = config('THROUGHPUT_SERVER_PORT', cast=int)
+eth_interface = config('THROUGHPUT_SERVER_ETH_INTERFACE')
+vlan_eth_interface = config('THROUGHPUT_SERVER_VLAN_ETH_INTERFACE')
 logger = logging.getLogger('mylogger-notif')
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler('./logs/dgsec_sockets_notifications.log')

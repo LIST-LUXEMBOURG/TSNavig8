@@ -112,4 +112,16 @@ export class WSCServices {
         }
     }
 
+    stopLidar() {
+        if (this.ws != null) {
+            this.ws.send('stop-lidar')
+        }
+    }
+
+    startLidar() {
+        if (this.ws != null) {
+            this.ws.send('disable-tas')
+        }
+    }
+
 }

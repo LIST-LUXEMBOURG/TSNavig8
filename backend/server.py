@@ -5,22 +5,18 @@ import base64
 import math
 from threading import Thread
 from websocket_server import WebsocketServer
-import json
-
-# Load the JSON configuration file
-with open('../config.json', 'r') as config_file:
-    config = json.load(config_file)
+from decouple import config
 
 # Constants for header and data block sizes
 HEADER_SIZE = 42
 DATA_BLOCK_SIZE = 100
 NUMBER_OF_BLOCKS = 12
 TAIL_SIZE = 6
-udp_host = config['udp_listener']['host']
-udp_port = config['udp_listener']['port']
-host = config['lidar_server']['host']
-port = config['lidar_server']['port']
-print(udp_host)
+udp_host = config('UDP_LISTENER_HOST')
+udp_port = config('UDP_LISTENER_PORT', cast=int)
+host = config('LIDAR_SERVER_HOST')
+port = config('LIDAR_SERVER_PORT', cast=int)
+
 current_timestamp = -1
 # Mapping of channel numbers to vertical angles
 channel_vertical_angles = {

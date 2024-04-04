@@ -28,7 +28,7 @@
                 "numerator": 13,
                 "denominator": 100000
             },
-            "cycle_time_extension": 1000,
+            "cycle_time_extension": 8,
             "base_time": {
                 "seconds": 0,
                 "nanoseconds": 0

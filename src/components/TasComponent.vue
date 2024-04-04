@@ -168,7 +168,7 @@ function generateJSON() {
             "numerator": slotData.value.reduce((acc, cur) => acc + cur.duration, 0) / Math.pow(10, numZeros),
             "denominator": denominator
           },
-          "cycle_time_extension": 1000,
+          "cycle_time_extension": 8,
           "base_time": {
             "seconds": 0,
             "nanoseconds": 0

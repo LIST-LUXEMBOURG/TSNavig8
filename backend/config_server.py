@@ -2,14 +2,10 @@ import logging
 import json
 from websocket_server import WebsocketServer
 import subprocess
-import json
+from decouple import config
 
-# Load the JSON configuration file
-with open('../config.json', 'r') as config_file:
-    config = json.load(config_file)
-
-host = config['config_server']['host']
-port = config['config_server']['port']
+host = config('CONFIG_SERVER_HOST')
+port = config('CONFIG_SERVER_PORT', cast=int)
 
 # Initialize logger for notifications
 logger = logging.getLogger('mylogger-notif')
@@ -43,6 +39,12 @@ def message_received(client, server, message):
         try:           
             subprocess.run(['ssh', 'soc-e@192.168.4.66', '-t' ,'python3', 'stop_traf_gen.py', '--port', '0'], check=True)
             subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/disable-tas.json', '-n', '1'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+
+    elif message == "stop-lidar":
+        try:           
+            subprocess.run(['ssh', 'relyum@192.168.4.64', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/stop-lidar.json', '-n', '1'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {e}")
 

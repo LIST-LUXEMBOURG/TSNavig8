@@ -229,11 +229,13 @@ function toggleLidar() {
   tooltipLidar.hide()
   if (lidarRunning) {
     lidarRunning = false;
-    $wsServices.disconnect();
+    // $wsServices.disconnect();
+    $wsConfServices.stopLidar();
   }
   else {
     lidarRunning = true;
-    $wsServices.connect();
+    // $wsServices.connect();
+    $wsConfServices.startLidar();
     displayPoints();
   }
   updateButtonStates();
