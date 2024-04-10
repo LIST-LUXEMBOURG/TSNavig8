@@ -1,7 +1,16 @@
 <template>
   <div style="margin-top: 10%;">
     <h5>Time-Aware Shaper Configuration</h5>
-    <table cellpadding="" cellspacing="30px" style="width: 100%;">
+    <div class="form-group row">
+      <label for="relyum" class="col-sm-5 col-form-label"><b>Select a Bridge:</b></label>
+      <div class="col-sm-7">
+        <select id="relyum" v-model="selectedBridge" class="form-control">
+          <option value="relyum20">RELY-TSN-BRIDGE 20.1.11</option>
+          <option value="relyum22">RELY-TSN-BRIDGE 22.3.0</option>
+        </select>
+      </div>
+    </div>
+    <table cellpadding="" cellspacing="30px" style="width: 100%; margin-top: 2%;">
       <tr>
         <td><b>Number of Slots</b> </td>
         <td><input type="number" v-model="slotCount" min="1" step="1" style="width: 120px;" class="form-control"></td>
@@ -78,6 +87,7 @@ import { ref, inject, watch, onMounted } from 'vue';
 import { Toast } from "bootstrap";
 
 const $wsServices = inject('$wscservices');
+const selectedBridge = ref('relyum20')
 const slotCount = ref(1);
 const slotData = ref([{ duration: 0, q7: false, q6: false, q5: false, q4: false, q3: false, q2: false, q1: false, q0: false }]);
 let configurationTitle = ref('')
@@ -113,6 +123,8 @@ const onMessage = (event) => {
 
 function generateJSON() {
   let controlList = [];
+  let controlListCopy = [];
+  let json = {};
   // Calculate the number of zeros in the numerator
   let numZeros = 0;
   let numeratorCopy = slotData.value.reduce((acc, cur) => acc + cur.duration, 0);
@@ -150,6 +162,12 @@ function generateJSON() {
       time_interval_value: slotData.value[rowIndex].duration
     });
 
+    controlListCopy.push({
+      gateStates: gateStatesValue,
+      operationName: "set-gate-states",
+      timeInterval: slotData.value[rowIndex].duration
+    });
+
   }
 
   if (error.value === true) {
@@ -157,32 +175,43 @@ function generateJSON() {
     toastBootstrap.show()
   }
   else {
-    const json = {
-      "qbv_gate_parameters": {
-        "gate_enabled": true,
-        "admin": {
-          "gate_states": 255,
-          "control_list_length": slotData.value.length,
-          "control_list": controlList,
-          "cycle_time": {
-            "numerator": slotData.value.reduce((acc, cur) => acc + cur.duration, 0) / Math.pow(10, numZeros),
-            "denominator": denominator
+    if (selectedBridge.value === 'relyum20') {
+      json = {
+        "qbv_gate_parameters": {
+          "gate_enabled": true,
+          "admin": {
+            "gate_states": 255,
+            "control_list_length": slotData.value.length,
+            "control_list": controlList,
+            "cycle_time": {
+              "numerator": slotData.value.reduce((acc, cur) => acc + cur.duration, 0) / Math.pow(10, numZeros),
+              "denominator": denominator
+            },
+            "cycle_time_extension": 8,
+            "base_time": {
+              "seconds": 0,
+              "nanoseconds": 0
+            }
           },
-          "cycle_time_extension": 8,
-          "base_time": {
-            "seconds": 0,
-            "nanoseconds": 0
-          }
-        },
-        "config_change": true
-      }
-    };
-
-    // Assuming $wsServices is an instance of WebSocket service
+          "config_change": true
+        }
+      };
+    }
+    else {
+      json = {
+        "gateEnabled": true,
+        "gateStates": 255,
+        "cycleTimeNumerator": slotData.value.reduce((acc, cur) => acc + cur.duration, 0) / Math.pow(10, numZeros),
+        "cycleTimeDenominator": denominator,
+        "cycleTimeExtension": 8,
+        "baseTimeSeconds": 0,
+        "baseTimeNanoseconds": 0,
+        "gateControlList": controlListCopy
+      };      
+    }
     $wsServices.sendTas(json);
     $wsServices.ws.onmessage = onMessage;
   }
-
 }
 
 onMounted(() => {

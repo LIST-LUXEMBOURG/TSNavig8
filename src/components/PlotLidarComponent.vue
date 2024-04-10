@@ -36,12 +36,15 @@
         <i class="bi bi-arrow-counterclockwise"></i>
       </button>
     </div>
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+      <div class="loading-wheel"></div>
+    </div>
 
     <div class="d-flex flex-row flex-grow-1">
       <canvas id="lidar-container"></canvas>
+     
     </div>
-<!--      </div>-->
-<!--    </div>-->
+
   </div>
 </template>
 
@@ -80,32 +83,39 @@ let tooltipNegative = null
 
 let tooltipResetEl = null
 let tooltipReset = null
+
+
+const onMessage = (event) => {
+  // Show loading overlay
+  const message = JSON.parse(event.data)
+  // console.log(message)
+  if (message.status == "button_success") {
+    console.log("The button should change the state")
+    // console.log("Traffic running", trafficRunning)
+    hideLoading();
+    updateButtonStates();
+
+  }
+  else if(message.status == "button_error") {
+    console.log("Error")
+  } 
+}
 onMounted(() => {
   tooltipLidarEl = document.getElementById('lidarButton')
   tooltipLidar = Tooltip.getOrCreateInstance(tooltipLidarEl)
-  tooltipLidarEl.addEventListener('shown.bs.tooltip', () => {
-    console.log("show")
-  })
+ 
   tooltipTrafficEl = document.getElementById('trafficButton')
   tooltipTraffic = Tooltip.getOrCreateInstance(tooltipTrafficEl)
-  tooltipTrafficEl.addEventListener('shown.bs.tooltip', () => {
-    console.log("show")
-  })
+  
   tooltipTasEl = document.getElementById('tasButton')
   tooltipTas = Tooltip.getOrCreateInstance(tooltipTasEl)
-  tooltipTasEl.addEventListener('shown.bs.tooltip', () => {
-    console.log("show")
-  })
+ 
   tooltipNegativeEl = document.getElementById('negativeTest')
   tooltipNegative = Tooltip.getOrCreateInstance(tooltipNegativeEl)
-  tooltipNegativeEl.addEventListener('shown.bs.tooltip', () => {
-    console.log("show")
-  })
+  
   tooltipResetEl = document.getElementById('resetTas')
   tooltipReset = Tooltip.getOrCreateInstance(tooltipResetEl)
-  tooltipResetEl.addEventListener('shown.bs.tooltip', () => {
-    console.log("show")
-  })
+
   tooltipLidar.hide()
   tooltipTraffic.hide()
   tooltipTas.hide()
@@ -114,8 +124,11 @@ onMounted(() => {
 
   $wsServices.connect()
   $wsConfServices.connect()
+  $wsConfServices.ws.onmessage = onMessage;
+
   sceneInitialisation()
   displayPoints()
+
 })
 
 onDeactivated(() => {
@@ -126,7 +139,6 @@ onDeactivated(() => {
 
 function sceneInitialisation() {
   updateButtonStates();
-  // updateTasButtonStates();
   // Create scene
   scene = new THREE.Scene();
   // Create camera
@@ -226,22 +238,24 @@ function animate() {
   // axesHelper.dispose()
 }
 function toggleLidar() {
+  showLoading();
+  $wsConfServices.ws.onmessage = onMessage;
   tooltipLidar.hide()
   if (lidarRunning) {
     lidarRunning = false;
-    // $wsServices.disconnect();
     $wsConfServices.stopLidar();
   }
   else {
     lidarRunning = true;
-    // $wsServices.connect();
     $wsConfServices.startLidar();
     displayPoints();
   }
-  updateButtonStates();
+  // updateButtonStates();
 }
 
 function toggleTraffic() {
+  showLoading();
+  $wsConfServices.ws.onmessage = onMessage;
   tooltipTraffic.hide()
   if (trafficRunning) {
     trafficRunning = false;
@@ -251,11 +265,12 @@ function toggleTraffic() {
     trafficRunning = true;
     $wsConfServices.enableNoise();
   }
-  updateButtonStates();
 
 }
 
 function toggleTas() {
+  showLoading();
+  $wsConfServices.ws.onmessage = onMessage;
   tooltipTas.hide()
   if (tasRunning) {
     tasRunning = false;
@@ -265,10 +280,11 @@ function toggleTas() {
     tasRunning = true;
     $wsConfServices.enableTas();
   }
-  updateButtonStates();
 }
 
 function toggleNegative() {
+  showLoading();
+  $wsConfServices.ws.onmessage = onMessage;
   tooltipNegative.hide()
   if (negativeRunning) {
     negativeRunning = false;
@@ -278,7 +294,6 @@ function toggleNegative() {
     negativeRunning = true;
     $wsConfServices.enableNegative();
   }
-  updateButtonStates();
 }
 
 function buttonClass() {
@@ -322,10 +337,25 @@ function tasButtonClass() {
 }
 
 function resetTas() {
+  showLoading();
   tasRunning = true;
   $wsConfServices.resetTas();
-  updateButtonStates();
 }
+
+function showLoading() {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      if (loadingOverlay) {
+        console.log("hide")
+        loadingOverlay.style.display = 'flex';
+      }
+    }
+  function  hideLoading() {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      if (loadingOverlay) {
+        
+        loadingOverlay.style.display = 'none';
+      }
+    }
 </script>
 
 <style scoped>
@@ -352,5 +382,32 @@ function resetTas() {
   min-width: 100%;
   width: 100%;
   padding: 5px;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's on top of other content */
+}
+
+.loading-wheel {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1a88a2;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

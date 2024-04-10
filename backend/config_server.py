@@ -81,14 +81,19 @@ def message_received(client, server, message):
             else:
                 command = 'ieee8021qbv change_current_configuration PORT_1 /usr/local/src/tsn_lidar/tas.json'
                 execute_ssh_commands(bridge_22_username, bridge_22_ip, command)
-
+            response = {"command": "enable-tas",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "enable-tas",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
 
     elif message == "enable-negative":
         try:           
             # subprocess.run(['ssh',  f'{traffic_generator_username}@{traffic_generator_ip}', '-t' ,'python3', 'stop_traf_gen.py', '--port', '0'], check=True)
-            
             if bridge == "relyum20":        
                 subprocess.run(['ssh', f'{bridge_20_username}@{bridge_20_ip}', '-t' ,'spt_qbv_config', '-w', '/usr/local/src/tsn_lidar/negative-tas.json', '-n', '1'], check=True)
             else:
@@ -97,8 +102,15 @@ def message_received(client, server, message):
 
             subprocess.run(['ssh', f'{traffic_generator_username}@{traffic_generator_ip}', '-t' ,'python3', 'config_traf_gen.py', '--port', '0', '-s', '1500', '-vtag', '1', '-p', '5', '-vid', '300', '-pr', '100'], check=True)
             subprocess.run(['ssh', f'{traffic_generator_username}@{traffic_generator_ip}', '-t' ,'python3', 'start_traf_gen.py', '--port', '0'], check=True)
+            response = {"command": "enable-negative",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "enable-negative",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
 
     elif message == "disable-negative":
         try:           
@@ -108,9 +120,15 @@ def message_received(client, server, message):
             else: 
                 command = 'ieee8021qbv change_current_configuration PORT_1 /usr/local/src/tsn_lidar/disable-tas22.json'
                 execute_ssh_commands(bridge_22_username, bridge_22_ip, command)
+            response = {"command": "disable-negative",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
-
+            response = {"command": "disable-negative",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
     elif message == "stop-lidar":
         try:     
             if bridge == "relyum20":        
@@ -118,8 +136,15 @@ def message_received(client, server, message):
             else: 
                 command = 'ieee8021qbv change_current_configuration PORT_1 /usr/local/src/tsn_lidar/stop-lidar22.json'
                 execute_ssh_commands(bridge_22_username, bridge_22_ip, command)
+            response = {"command": "stop-lidar",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "stop-lidar",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
 
     elif message == "disable-tas":
         try:    
@@ -128,22 +153,41 @@ def message_received(client, server, message):
             else: 
                 command = 'ieee8021qbv change_current_configuration PORT_1 /usr/local/src/tsn_lidar/disable-tas22.json'
                 execute_ssh_commands(bridge_22_username, bridge_22_ip, command)
-       
+            
+            response = {"command": "disable-tas",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "disable-tas",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
 
     elif message == "enable-noise":
         try:          
             subprocess.run(['ssh', f'{traffic_generator_username}@{traffic_generator_ip}', '-t' ,'python3', 'start_traf_gen.py', '--port', '0'], check=True)
+            response = {"command": "enable-noise",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
-
+            response = {"command": "enable-noise",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
     elif message == "disable-noise":
         try:           
             subprocess.run(['ssh', f'{traffic_generator_username}@{traffic_generator_ip}', '-t' ,'python3', 'stop_traf_gen.py', '--port', '0'], check=True)
+            response = {"command": "disable-noise",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
-
+            response = {"command": "disable-noise",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
     elif message == "reset-tas":
         try:  
             if bridge == "relyum20":        
@@ -151,9 +195,15 @@ def message_received(client, server, message):
             else: 
                 command = 'ieee8021qbv change_current_configuration PORT_1 /usr/local/src/tsn_lidar/lidar_tas22.json'
                 execute_ssh_commands(bridge_22_username, bridge_22_ip, command)
-       
+            response = {"command": "reset-tas",
+                        "status": "button_success", 
+                        "message": "Configuration applied successfully"}
         except subprocess.CalledProcessError as e:
-            print(f"Error executing command: {e}")
+            response = {"command": "reset-tas",
+                        "status": "button_error", 
+                        "message": f"Error executing command: {e}"}
+        response_json = json.dumps(response)
+        server.send_message_to_all(response_json)
 
     elif "qbv_gate_parameters" in message:
         bridge = "relyum20"
