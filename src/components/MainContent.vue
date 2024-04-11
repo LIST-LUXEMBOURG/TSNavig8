@@ -1,13 +1,13 @@
 <script setup>
 import PlotLidarComponent from "@/components/PlotLidarComponent.vue";
-import ChartPlotComponent from "@/components/ChartPlotComponent.vue";
+import PlotBandwidthComponent from "@/components/PlotBandwidthComponent.vue";
 
 </script>
 
 <template>
   <div class="main-content-container">
     <PlotLidarComponent />
-    <ChartPlotComponent />
+    <PlotBandwidthComponent />
   </div>
 
 </template>
