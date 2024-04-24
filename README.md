@@ -1,7 +1,5 @@
 # TSNavig8 - Demo: Interactive Off-the-Shelf In-Car TSN Testbed
 
-  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
-
 ## Abstract
 TSNavig8 represents an interactive and affordable Time-Sensitive Networking (TSN) testbed built using off-the-shelf hardware. It provides a user-friendly interface for configuring an in-car TSN testbed and experiencing real-time interactions, such as assessing the impact of background noise traffic on automotive LiDAR sensor data, with support for configuring the IEEE 802.1Qbv standard.
 
