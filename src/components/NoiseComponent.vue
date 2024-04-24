@@ -1,3 +1,7 @@
+<!-- 
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+-->
 <template>
     <div style="margin-top: 2%;">
         <h5>Traffic Generator Configuration</h5>
@@ -50,7 +54,6 @@ const transmissionRate = ref(1);
 const $wsServices = inject('$wscservices');
 let configurationTitle = ref('')
 let configurationMsg = ref('')
-//const toastTrigger = document.getElementById('liveToastBtn')
 let toastLiveExample = null
 let toastBootstrap = null
 let error = ref(false);
@@ -93,32 +96,23 @@ function configure() {
     error.value = true
     console.log("frameSize: " + frameSize.value)
     configurationMsg.value = "\bsFrame Size\be must be between 60 and 1518 bytes\n"
-//    toastBootstrap.show()
-//    return;
+
   }
   if (priorityCodePoint.value < 0 || priorityCodePoint.value > 7) {
     error.value = true
-//        alert("Priority Code Point must be between 0 and 7");
     console.log("priorityCodePoint: " + priorityCodePoint.value)
     configurationMsg.value = configurationMsg.value + "\bsPriority Code\be Point must be between 0 and 7\n"
-//    toastBootstrap.show()
-//    return;
   }
   if (transmissionRate.value < 1 || transmissionRate.value > 100) {
-//        alert("Transmission Rate must be between 1 and 100%");
     error.value = true
     console.log("transmissionRate: " + transmissionRate.value)
     configurationMsg.value = configurationMsg.value + "\bsTransmission Rate\be must be between 1 and 100%!\n"
-    // toastBootstrap.show()
-    // return;
   }
 
   if (error.value === true) {
     configurationTitle.value = "Incorrect Configuration"
     toastBootstrap.show()
   }  else {
-    
-
 
     $wsServices.configureNoise("--frame_size " + frameSize.value + " -p " + priorityCodePoint.value + " -pr " + transmissionRate.value)
     $wsServices.ws.onmessage = onMessage;

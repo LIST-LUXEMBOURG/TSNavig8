@@ -1,3 +1,7 @@
+/*
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+*/
 import { createApp } from 'vue'
 import { createPinia } from "pinia";
 import App from './App.vue';
@@ -14,7 +18,6 @@ const app = createApp(App)
 app.use(pinia)
 const lidarDataStore = usePointsStore()
 
-// console.log('lidar host', process.env.VUE_APP_LIDAR_SERVER_HOST)
 app.provide("$wsservices", new WSServices(lidarDataStore, { url: `ws://${process.env.VUE_APP_LIDAR_SERVER_HOST}:${process.env.VUE_APP_LIDAR_SERVER_PORT}` }))
 app.provide("$wstservices", new WSTServices({ url: `ws://${process.env.VUE_APP_THROUGHPUT_SERVER_HOST}:${process.env.VUE_APP_THROUGHPUT_SERVER_PORT}`}))
 app.provide("$wscservices", new WSCServices({ url: `ws://${process.env.VUE_APP_CONFIG_SERVER_HOST}:${process.env.VUE_APP_CONFIG_SERVER_PORT}` }))

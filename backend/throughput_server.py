@@ -1,3 +1,7 @@
+'''
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt 
+'''
 import time
 import psutil
 import json

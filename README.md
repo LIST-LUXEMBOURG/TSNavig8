@@ -7,7 +7,8 @@ Copyright 2010 - 2016 Luxembourg Institute of Science and Technology. All rights
 TSNavig8 represents an interactive and affordable Time-Sensitive Networking (TSN) testbed built using off-the-shelf hardware. It provides a user-friendly interface for configuring an in-car TSN testbed and experiencing real-time interactions, such as assessing the impact of background noise traffic on automotive LiDAR sensor data, with support for configuring the IEEE 802.1Qbv standard.
 
 ## License
-???
+© 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+This program is licensed under AGPL V3.0 License. Please consult the LICENSE file.
 
 ## Requirements
 
@@ -15,7 +16,6 @@ TSNavig8 represents an interactive and affordable Time-Sensitive Networking (TSN
     * python-websocket-server v0.6.4
 
 * Node.js >= 18.3 
-* Vue CLI >= ?.?
 * JavaScript es6, with the following libraries?
     * Three.js v0.162.0
     * Chart.js v3.9.1

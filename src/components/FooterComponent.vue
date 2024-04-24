@@ -1,7 +1,7 @@
-<!-- Footer.vue -->
-<script setup>
-</script>
-
+<!-- 
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+-->
 <template>
   <footer class="footer">
       <div class="d-flex flex-row justify-content-between align-items-center flex-grow-1">
@@ -11,13 +11,13 @@
       </div>
   </footer>
 </template>
-
+<script setup>
+</script>
 <style scoped>
 .footer {
   position: fixed;
   width: calc(100% - 24px);
   bottom: 0;
-  //background-color: #d3c4b2;
   padding: 30px 10px;
   color: black;
   border-top: 10px double #b8b4c3;

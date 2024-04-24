@@ -1,3 +1,7 @@
+<!-- 
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+-->
 <template>
   <div class="d-flex flex-column mt-2" id="lidar-wrapper">
     <div class="d-flex flex-row flex-grow-1 justify-content-center">

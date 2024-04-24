@@ -1,3 +1,7 @@
+/*
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+*/
 import { defineStore } from "pinia";
 
 export const usePointsStore = defineStore('pointsStore', {
@@ -11,7 +15,6 @@ export const usePointsStore = defineStore('pointsStore', {
     actions: {
         setLidarData(lidarData_) {
             this.lidarData = lidarData_
-            // console.log("lidarData: " + JSON.stringify(this.getLidarData))
         }
     }
 })

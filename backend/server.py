@@ -1,7 +1,10 @@
+'''
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+'''
 import logging
 import json
 import socket
-import base64
 import math
 from threading import Thread
 from websocket_server import WebsocketServer

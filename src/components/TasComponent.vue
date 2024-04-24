@@ -1,3 +1,7 @@
+<!-- 
+  © 2024 - Luxembourg Institute of Science and Technology. All Rights Reserved
+  This program is licensed under AGPL V3.0 License -  https://www.gnu.org/licenses/agpl-3.0.txt
+-->
 <template>
   <div style="margin-top: 10%;">
     <h5>Time-Aware Shaper Configuration</h5>
@@ -105,7 +109,6 @@ function replaceWithBr() {
 const onMessage = (event) => {
   const message = JSON.parse(event.data)
   if (message.status == "success") {
-    // console.log("hw ", message)
     error.value = false
     configurationTitle.value = "Configuration"
     configurationMsg.value = "\bsConfiguration Successfully Applied!\be"
@@ -131,7 +134,6 @@ function generateJSON() {
   while (numeratorCopy % 10 === 0 && numeratorCopy !== 0) {
     numZeros++;
     numeratorCopy /= 10;
-    // console.log("num zeros = ", numZeros)
   }
 
   // Adjust the denominator accordingly
