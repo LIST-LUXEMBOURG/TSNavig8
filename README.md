@@ -1,5 +1,5 @@
 # TSNavig8 - Demo: Interactive Off-the-Shelf In-Car TSN Testbed
-
+The described software is presented in the paper ***"Demo: Interactive Off-the-Shelf In-Car TSN Testbed"***, accepted for publication in the IEEE Vehicular Networking Conference (VNC 2024).
 ## Abstract
 TSNavig8 represents an interactive and affordable Time-Sensitive Networking (TSN) testbed built using off-the-shelf hardware. It provides a user-friendly interface for configuring an in-car TSN testbed and experiencing real-time interactions, such as assessing the impact of background noise traffic on automotive LiDAR sensor data, with support for configuring the IEEE 802.1Qbv standard.
 
@@ -50,6 +50,8 @@ You can access the application on: http://localhost:8080
 
 ## Architecture
 
+<img src="src/assets/vnc_demo_architecture.png">
+
 ## Project structure
 * **backend** folder
     
@@ -60,6 +62,15 @@ You can access the application on: http://localhost:8080
     * `throughput_server.py` - Python server  responsible for computing the real-time bandwidth utilization every second and sending this data to the web client application.
 
     * `config_server.py` - Python server  used to perform hardware configuration over the Secure Shell (SSH) protocol based on input parameters provided by the user.
+
+* **backend/tas_configs/bridge20** folder
+    
+    * This folder contains examples of Time-Aware Shaper configuration files for ```RELY-TSN-Bridge v20.1.11```.
+
+* **backend/tas_configs/bridge22** folder
+
+    * This folder contains examples of Time-Aware Shaper configuration files for ```RELY-TSN-Bridge v22.3.0```.
+
 
 * **src/components** folder 
 This folder contins the following components:
