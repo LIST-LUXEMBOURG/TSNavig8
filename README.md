@@ -88,3 +88,23 @@ This folder contins the following components:
     * `HeaderComponent.vue` - this component represents the header section of the application.
     
     * `MainComponent.vue` - this component represents the main content area of the application.
+
+## Acknowledgements
+If you utilize this code, we kindly ask that you refer to the following publication:
+```tex
+@inproceedings{andronovici2024interactive,
+  author = {Andronovici, Darinela and Nicolas, Damien and Turcanu, Ion and Sommer, Christoph},
+  title = {{Demo: Interactive Off-the-Shelf In-Car TSN Testbed}},
+  booktitle = {15th IEEE Vehicular Networking Conference (VNC 2024)},
+  address = {Kobe, Japan},
+  month = {May},
+  note = {to appear},
+  publisher = {IEEE},
+  year = {2024},
+}
+```
+
+## Contact
+For inquiries, assistance, or further information, please feel free to reach out to:
+* Damien NICOLAS at damien.nicolas@list.lu
+* Ion TURCANU at ion.turcanu@list.lu
